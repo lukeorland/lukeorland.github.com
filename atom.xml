@@ -4,7 +4,7 @@
   <title><![CDATA[Luke Orland]]></title>
   <link href="http://lukeorland.github.com/atom.xml" rel="self"/>
   <link href="http://lukeorland.github.com/"/>
-  <updated>2012-01-13T20:49:24-05:00</updated>
+  <updated>2012-01-14T12:50:15-05:00</updated>
   <id>http://lukeorland.github.com/</id>
   <author>
     <name><![CDATA[Luke Orland]]></name>
@@ -33,7 +33,7 @@
     <id>http://lukeorland.github.com/blog/2012/01/13/mediasite-extract-content</id>
     <content type="html"><![CDATA[<p>Mediasite is a set of webcasting solutions offered by Sonic Foundry. One of the products in the mediasite family is a lecture capturing platform. The end product provided by Mediasite is an embeddable webplayer that plays the video of lecturer in one window and simultaneously flipping through the slides. Slide transition times occur just as during the original lecture.</p>
 
-<p>I wrote a Python script that parses the content of a Mediasite lecture and creates DV-formatted videos of the lecture and the slideshow. In my case these videos are useful for the sake of combining them into a single video which will then be uploaded to Vimeo.</p>
+<p>I wrote a Python script that parses the content of a Mediasite lecture and creates DV-formatted videos of the lecture and the slideshow. In my case these videos are useful for the sake of combining them into a single video which will then be uploaded to Vimeo. The command line tools <code>ffmpeg</code> and <code>mencoder</code> are required.</p>
 
 <p>and here it is.</p>
 
