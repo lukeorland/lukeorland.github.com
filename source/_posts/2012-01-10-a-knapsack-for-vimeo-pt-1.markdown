@@ -4,6 +4,7 @@ title: "a knapsack for Vimeo, part 1"
 date: 2012-01-10 09:43
 comments: true
 categories: 
+published: false
 ---
 
 The Vimeo Premium account allows a user to upload up to 5 GB of videos per week. The size of a video cannot be distributed across subsequent weeks. Unused upload space does not roll over to following weeks. My goal is to the most cost-effective use of the Vimeo Premium account by uploading as close to the full 5 GB as possible every week.
