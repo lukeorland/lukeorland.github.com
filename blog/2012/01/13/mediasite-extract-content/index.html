@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>mediasite_extract_content - Luke Orland</title>
+  <meta name="author" content="Luke Orland">
+
+  
+  <meta name="description" content="Mediasite is a set of webcasting solutions offered by Sonic Foundry. One of the products in the mediasite family is a lecture capturing platform. The &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lukeorland.github.com/blog/2012/01/13/mediasite-extract-content">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Luke Orland" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Luke Orland</a></h1>
+  
+    <h2>polyglot programs</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lukeorland.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Mediasite_extract_content</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-13T19:54:00-05:00" pubdate data-updated="true">Jan 13<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Mediasite is a set of webcasting solutions offered by Sonic Foundry. One of the products in the mediasite family is a lecture capturing platform. The end product provided by Mediasite is an embeddable webplayer that plays the video of lecturer in one window and simultaneously flipping through the slides. Slide transition times occur just as during the original lecture.</p>
+
+<p>I wrote a Python script that parses the content of a Mediasite lecture and creates DV-formatted videos of the lecture and the slideshow. In my case these videos are useful for the sake of combining them into a single video which will then be uploaded to Vimeo.</p>
+
+<p>and here it is.</p>
+
+<!-- more -->
+
+
+
+
+<div><script src='https://gist.github.com/1609649.js?file=mediasite_slides_movie.py'></script>
+<noscript><pre><code># Convert a Mediasite content for a lecture into two DV-formatted videos:
+#   one from the lecture
+#   one of the slideshow with timings extracted from the Mediasite content.
+#
+# Usage: run this Python script from the root directory of the Mediasite
+# content.
+# It's the directory that contains the directories and files as follows:
+# App_Themes/    Content/       Player.html   PlayerOptions/     Players/
+#
+# Luke Orland
+# Fri Jan 13 19:45:02 EST 2012
+
+from __future__ import print_function
+import os
+import re
+import shlex
+import subprocess
+
+FPS = 1   # Frames per second
+ROOT = os.path.abspath('.')
+
+def count_jpg_files(file_path):
+    return 
+
+# User should specify the root directory containing Mediasite presentation
+# files. Probably is something like Untitled-1234/ or similar.
+
+# Count the number of JPG files in the Content directory.
+content_dir = os.path.join(ROOT, 'Content')
+list_jpgs = [file for file in os.listdir(content_dir) if
+             file.lower().endswith('.jpg')]
+
+num_jpg_files = len(list_jpgs)
+
+# Read the transition times from the Players/Scripts/standalone-manifest.js
+# file.
+transition_times_file_path = os.path.join(ROOT, 'Players', 'Scripts',
+                                          'standalone-manifest.js') 
+re_slide_xstn_ms = re.compile('\s*Manifest\.Slides\[\d+\] = new Slide\(&quot;&quot;,(\d+),&quot;&quot;\);')
+transition_times_ms = []
+with open(transition_times_file_path) as fh:
+    for line in fh.readlines():
+        match = re_slide_xstn_ms.match(line)
+        if match is not None:
+            transition_times_ms.append(int(match.group(1)))
+assert len(transition_times_ms) == num_jpg_files
+assert len(transition_times_ms) == len(list_jpgs)
+
+# Create a text file that repeates the appropriate slide once per line at X FPS
+# rate.
+output_lines = []
+frame_number = 0
+frame_number_ms = lambda x: x / FPS * 1000
+idx = 0
+while idx &lt; num_jpg_files:
+    frame_number += 1
+    output_lines.append(list_jpgs[idx])
+    if frame_number_ms(frame_number) &gt;= transition_times_ms[idx]:
+        idx += 1
+jpg_frames_file_path = os.path.join(ROOT, 'jpg_frames.txt')
+with open(jpg_frames_file_path, 'w') as fh:
+    lines_str = &quot;\n&quot;.join(output_lines)
+    fh.write(lines_str)
+
+# Use ffmpeg to convert the WMV lecture video into DV.
+# (Start it first, since it takes the longest to finish.)
+cmd = 'ffmpeg -i Content/video.wmv -target ntsc-dv lecture.dv'
+args = shlex.split(cmd)
+p = subprocess.Popen(args, cwd=ROOT)
+
+# Use that text file with the MEncoder script to turn the JPGs into an AVI.
+cmd = 'mencoder mf://@../jpg_frames.txt -mf w=1280:h=1024:fps=1:type=jpg -ovc lavc -lavcopts vcodec=mpeg4:mbd=2:trell -oac copy -o ../slides.avi'
+CWD = os.path.join(ROOT, 'Content')
+args = shlex.split(cmd)
+p = subprocess.Popen(args, cwd=CWD)
+p.wait()
+print()
+
+# Use ffmpeg to convert the AVI into DV.
+cmd = 'ffmpeg -i slides.avi -target ntsc-dv slides.dv'
+args = shlex.split(cmd)
+p = subprocess.Popen(args, cwd=ROOT)
+print()
+
+</code></pre></noscript></div>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Luke Orland</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-13T19:54:00-05:00" pubdate data-updated="true">Jan 13<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lukeorland.github.com/blog/2012/01/13/mediasite-extract-content/" data-via="orluke" data-counturl="http://lukeorland.github.com/blog/2012/01/13/mediasite-extract-content/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/01/13/transcontinental-dance-collective/" title="next Post: transcontinental dance collective">transcontinental dance collective &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/01/13/transcontinental-dance-collective/">transcontinental dance collective</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/13/mediasite-extract-content/">mediasite_extract_content</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("orluke", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/orluke" class="twitter-follow-button" data-show-count="false">Follow @orluke</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/orluke?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Luke Orland -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'orluke';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lukeorland.github.com/blog/2012/01/13/mediasite-extract-content/';
+        var disqus_url = 'http://lukeorland.github.com/blog/2012/01/13/mediasite-extract-content/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

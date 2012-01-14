@@ -4,7 +4,7 @@
   <title><![CDATA[Luke Orland]]></title>
   <link href="http://lukeorland.github.com/atom.xml" rel="self"/>
   <link href="http://lukeorland.github.com/"/>
-  <updated>2012-01-10T07:52:19-05:00</updated>
+  <updated>2012-01-13T20:49:24-05:00</updated>
   <id>http://lukeorland.github.com/</id>
   <author>
     <name><![CDATA[Luke Orland]]></name>
@@ -12,5 +12,126 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[transcontinental dance collective]]></title>
+    <link href="http://lukeorland.github.com/blog/2012/01/13/transcontinental-dance-collective/"/>
+    <updated>2012-01-13T20:09:00-05:00</updated>
+    <id>http://lukeorland.github.com/blog/2012/01/13/transcontinental-dance-collective</id>
+    <content type="html"><![CDATA[<p>Two of my incredibly talented dancer friends embarked on a mission to travel the world learning and teaching dance. Indeed, they traveled many places and creative lovely and inventive dance videos wherever they went. I contributed a basic website to help lend their project a centralized presence on the internet. Mira and Robin have since diverted their attention to a new effort called <em>The Duet Project</em>, and I&#8217;m excited to see what sublime creations the will issue forth.</p>
+
+<p>As for the old website, all my fancy CSS work is gone but most of the content still exists thanks to the Wayback Machine internet archive of <a href="http://web.archive.org/web/20080702030005/http://www.transcontinentaldance.org/">transcontinentaldance.org</a>.</p>
+
+<p>Also for posterity, the source of the pages are on <a href="https://github.com/lukeorland/transcontinentaldance.org">GitHub</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[mediasite_extract_content]]></title>
+    <link href="http://lukeorland.github.com/blog/2012/01/13/mediasite-extract-content/"/>
+    <updated>2012-01-13T19:54:00-05:00</updated>
+    <id>http://lukeorland.github.com/blog/2012/01/13/mediasite-extract-content</id>
+    <content type="html"><![CDATA[<p>Mediasite is a set of webcasting solutions offered by Sonic Foundry. One of the products in the mediasite family is a lecture capturing platform. The end product provided by Mediasite is an embeddable webplayer that plays the video of lecturer in one window and simultaneously flipping through the slides. Slide transition times occur just as during the original lecture.</p>
+
+<p>I wrote a Python script that parses the content of a Mediasite lecture and creates DV-formatted videos of the lecture and the slideshow. In my case these videos are useful for the sake of combining them into a single video which will then be uploaded to Vimeo.</p>
+
+<p>and here it is.</p>
+
+<!-- more -->
+
+
+
+
+<div><script src='https://gist.github.com/1609649.js?file=mediasite_slides_movie.py'></script>
+<noscript><pre><code># Convert a Mediasite content for a lecture into two DV-formatted videos:
+#   one from the lecture
+#   one of the slideshow with timings extracted from the Mediasite content.
+#
+# Usage: run this Python script from the root directory of the Mediasite
+# content.
+# It's the directory that contains the directories and files as follows:
+# App_Themes/    Content/       Player.html   PlayerOptions/     Players/
+#
+# Luke Orland
+# Fri Jan 13 19:45:02 EST 2012
+
+from __future__ import print_function
+import os
+import re
+import shlex
+import subprocess
+
+FPS = 1   # Frames per second
+ROOT = os.path.abspath('.')
+
+def count_jpg_files(file_path):
+    return 
+
+# User should specify the root directory containing Mediasite presentation
+# files. Probably is something like Untitled-1234/ or similar.
+
+# Count the number of JPG files in the Content directory.
+content_dir = os.path.join(ROOT, 'Content')
+list_jpgs = [file for file in os.listdir(content_dir) if
+             file.lower().endswith('.jpg')]
+
+num_jpg_files = len(list_jpgs)
+
+# Read the transition times from the Players/Scripts/standalone-manifest.js
+# file.
+transition_times_file_path = os.path.join(ROOT, 'Players', 'Scripts',
+                                          'standalone-manifest.js') 
+re_slide_xstn_ms = re.compile('\s*Manifest\.Slides\[\d+\] = new Slide\(&quot;&quot;,(\d+),&quot;&quot;\);')
+transition_times_ms = []
+with open(transition_times_file_path) as fh:
+    for line in fh.readlines():
+        match = re_slide_xstn_ms.match(line)
+        if match is not None:
+            transition_times_ms.append(int(match.group(1)))
+assert len(transition_times_ms) == num_jpg_files
+assert len(transition_times_ms) == len(list_jpgs)
+
+# Create a text file that repeates the appropriate slide once per line at X FPS
+# rate.
+output_lines = []
+frame_number = 0
+frame_number_ms = lambda x: x / FPS * 1000
+idx = 0
+while idx &lt; num_jpg_files:
+    frame_number += 1
+    output_lines.append(list_jpgs[idx])
+    if frame_number_ms(frame_number) &gt;= transition_times_ms[idx]:
+        idx += 1
+jpg_frames_file_path = os.path.join(ROOT, 'jpg_frames.txt')
+with open(jpg_frames_file_path, 'w') as fh:
+    lines_str = &quot;\n&quot;.join(output_lines)
+    fh.write(lines_str)
+
+# Use ffmpeg to convert the WMV lecture video into DV.
+# (Start it first, since it takes the longest to finish.)
+cmd = 'ffmpeg -i Content/video.wmv -target ntsc-dv lecture.dv'
+args = shlex.split(cmd)
+p = subprocess.Popen(args, cwd=ROOT)
+
+# Use that text file with the MEncoder script to turn the JPGs into an AVI.
+cmd = 'mencoder mf://@../jpg_frames.txt -mf w=1280:h=1024:fps=1:type=jpg -ovc lavc -lavcopts vcodec=mpeg4:mbd=2:trell -oac copy -o ../slides.avi'
+CWD = os.path.join(ROOT, 'Content')
+args = shlex.split(cmd)
+p = subprocess.Popen(args, cwd=CWD)
+p.wait()
+print()
+
+# Use ffmpeg to convert the AVI into DV.
+cmd = 'ffmpeg -i slides.avi -target ntsc-dv slides.dv'
+args = shlex.split(cmd)
+p = subprocess.Popen(args, cwd=ROOT)
+print()
+
+</code></pre></noscript></div>
+
+
+
+]]></content>
+  </entry>
   
 </feed>
