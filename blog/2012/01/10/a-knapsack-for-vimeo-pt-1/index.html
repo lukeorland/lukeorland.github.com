@@ -5,14 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - Luke Orland</title>
+  <title>a knapsack for Vimeo - Luke Orland</title>
   <meta name="author" content="Luke Orland">
 
   
-  <meta name="description" content="Blog Archive 2012 combined_size_python_script
-Jan 25 2012 transcontinental dance collective
-Jan 13 2012 mediasite_extract_content
-Jan 13 2012 a &hellip;">
+  <meta name="description" content="The Vimeo Premium account allows a user to upload up to 5 GB of videos per week. The size of a video cannot be distributed across subsequent weeks. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +18,7 @@ Jan 13 2012 a &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lukeorland.github.com/blog/archives">
+  <link rel="canonical" href="http://lukeorland.github.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -66,62 +63,107 @@ Jan 13 2012 a &hellip;">
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      <h1 class="entry-title">A Knapsack for Vimeo</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-10T09:43:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives">
 
 
+<div class="entry-content"><p>The Vimeo Premium account allows a user to upload up to 5 GB of videos per week. The size of a video cannot be distributed across subsequent weeks. Unused upload space does not roll over to following weeks. My goal is to make the most cost-effective use of the Vimeo Premium account by uploading as close to the full 5 GB as possible every week.</p>
 
-  
-  <h2>2012</h2>
+<p>As it turns out, selecting a subset of available video files that combine for the maximum fit within a certain limit is an instance of the <a href="http://en.wikipedia.org/wiki/Knapsack_problem#0-1_knapsack_problem">0-1 knapsack problem</a>. I have taken a crack at implementing a solution for this problem. First, I wrote a 0-1 knapsack solver module (in Python) as well as a command-line Python script that utilizes the solver to determine the optimal list of video files to upload for the week.</p>
 
-<article>
-  
-<h1><a href="/blog/2012/01/25/combined-size-python-script/">combined_size_python_script</a></h1>
-<time datetime="2012-01-25T01:36:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>25</span> <span class='year'>2012</span></time>
+<h1>Search space</h1>
 
+<p>To understand how this is a difficult problem to solve, consider the number of possible combinations of files that could comprise a unique subset. Each file is either in each subset or not. That means there are 2<sup>N</sup> possible combinations of candidate files. For a set of 40 files, there would be 2<sup>40</sup> = 1,099,511,627,776 from which an exact optimal subset would be identified.</p>
 
-</article>
+<h1>Solution</h1>
 
+<p>My first solution uses a pure branch-and-bound recursive algorithm. The weight and profit of each file is its size in bytes, and the capacity of the knapsack is 5000000000 bytes. This approach is much too inefficient, likely due to repeated evaluations of the same subsets in rearranged order.</p>
 
+<h1>Next step</h1>
 
-<article>
-  
-<h1><a href="/blog/2012/01/13/transcontinental-dance-collective/">transcontinental dance collective</a></h1>
-<time datetime="2012-01-13T20:09:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>13</span> <span class='year'>2012</span></time>
+<p>Alternatively, a well-known dynamic programming algorithm can be employed. I wrote this method. Indeed, it finds the exact solution much more quickly, in O(nW) time and O(W) space, where n is the number of candidate files, and W is the size limit.</p>
 
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/01/13/mediasite-extract-content/">mediasite_extract_content</a></h1>
-<time datetime="2012-01-13T19:54:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>13</span> <span class='year'>2012</span></time>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/">a knapsack for Vimeo</a></h1>
-<time datetime="2012-01-10T09:43:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>10</span> <span class='year'>2012</span></time>
-
-
-</article>
-
+<p>The code I have written can be found at <a href="https://github.com/lukeorland/maxfit">github.com/lukeorland/maxfit</a>.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Luke Orland</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-10T09:43:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lukeorland.github.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/" data-via="orluke" data-counturl="http://lukeorland.github.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/01/13/mediasite-extract-content/" title="next Post: mediasite_extract_content">mediasite_extract_content &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -197,7 +239,10 @@ Jan 13 2012 a &hellip;">
       var disqus_shortname = 'flyorlandic';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lukeorland.github.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/';
+        var disqus_url = 'http://lukeorland.github.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

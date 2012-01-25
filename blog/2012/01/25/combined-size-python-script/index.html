@@ -5,14 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - Luke Orland</title>
+  <title>combined_size_python_script - Luke Orland</title>
   <meta name="author" content="Luke Orland">
 
   
-  <meta name="description" content="Blog Archive 2012 combined_size_python_script
-Jan 25 2012 transcontinental dance collective
-Jan 13 2012 mediasite_extract_content
-Jan 13 2012 a &hellip;">
+  <meta name="description" content="Here is a simple Python script that takes a list of files and prints their combined size in bytes (by default) or megabytes (by specifying the &#8211 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +18,7 @@ Jan 13 2012 a &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lukeorland.github.com/blog/archives">
+  <link rel="canonical" href="http://lukeorland.github.com/blog/2012/01/25/combined-size-python-script">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -66,62 +63,141 @@ Jan 13 2012 a &hellip;">
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      <h1 class="entry-title">Combined_size_python_script</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-25T01:36:00-05:00" pubdate data-updated="true">Jan 25<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives">
+
+
+<div class="entry-content"><p>Here is a simple Python script that takes a list of files and prints their combined size in bytes (by default) or megabytes (by specifying the &#8211;mb switch). Code is below.</p>
+
+<!-- more -->
 
 
 
-  
-  <h2>2012</h2>
 
-<article>
-  
-<h1><a href="/blog/2012/01/25/combined-size-python-script/">combined_size_python_script</a></h1>
-<time datetime="2012-01-25T01:36:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>25</span> <span class='year'>2012</span></time>
+<div><script src='https://gist.github.com/1673391.js?file=combined_size.py'></script>
+<noscript><pre><code>#!/usr/bin/env python
+
+from __future__ import print_function
+import argparse
+import os
+
+def file_size(file_name):
+    &quot;&quot;&quot;Returns size of the file named file_name in bytes.&quot;&quot;&quot;
+    if not os.path.exists(file_name):
+        msg = &quot;The file {} does not exist.&quot;.format(file_name)
+        raise argparse.ArgumentTypeError(msg)
+    return os.path.getsize(file_name)
+
+def bytes_to_MB(bytes):
+    &quot;&quot;&quot;Returns float value&quot;&quot;&quot;
+    return bytes / 1e6
+
+def main():
+    # Parse the command line arguments.
+    parser = argparse.ArgumentParser(description='Prints the combined MB of ' +
+                                     'the files passed as arguments.')
+
+    parser.add_argument('file_names', nargs='*',
+                        help='files that are candidates for fitting')
+    parser.add_argument('--mb', '-m', action='count',
+                        help='prints the total number of bytes instead of MB')
+    args = parser.parse_args()
+    file_names = args.file_names
+    mb = args.mb
+
+    total_size = sum([file_size(fn) for fn in file_names])
+    if mb:
+        print(&quot;{}&quot;.format(total_size))
+    else:
+        print(&quot;{}&quot;.format(bytes_to_MB(total_size)))
+
+if __name__ == '__main__':
+    main()
+
+</code></pre></noscript></div>
 
 
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/01/13/transcontinental-dance-collective/">transcontinental dance collective</a></h1>
-<time datetime="2012-01-13T20:09:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>13</span> <span class='year'>2012</span></time>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/01/13/mediasite-extract-content/">mediasite_extract_content</a></h1>
-<time datetime="2012-01-13T19:54:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>13</span> <span class='year'>2012</span></time>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/">a knapsack for Vimeo</a></h1>
-<time datetime="2012-01-10T09:43:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>10</span> <span class='year'>2012</span></time>
-
-
-</article>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Luke Orland</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-25T01:36:00-05:00" pubdate data-updated="true">Jan 25<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lukeorland.github.com/blog/2012/01/25/combined-size-python-script/" data-via="orluke" data-counturl="http://lukeorland.github.com/blog/2012/01/25/combined-size-python-script/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/01/13/transcontinental-dance-collective/" title="Previous Post: transcontinental dance collective">&laquo; transcontinental dance collective</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -197,7 +273,10 @@ Jan 13 2012 a &hellip;">
       var disqus_shortname = 'flyorlandic';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lukeorland.github.com/blog/2012/01/25/combined-size-python-script/';
+        var disqus_url = 'http://lukeorland.github.com/blog/2012/01/25/combined-size-python-script/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
