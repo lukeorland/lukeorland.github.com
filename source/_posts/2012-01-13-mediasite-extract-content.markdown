@@ -20,7 +20,6 @@ Below is more information about installing `ffmpeg` and `mencoder`, and the scri
 ### `mencoder` with Homebrew
 A user who has `homebrew` installed presumably has read/write access to the right system directories, and the commands are simply
 
-    brew install ffmpeg
     brew install mplayer
 
 ### `mencoder` with downloaded binaries
@@ -32,7 +31,6 @@ The MEncoder binary can be downloaded from the bottom of this [post](http://stef
 A user who has `homebrew` installed presumably has read/write access to the right system directories, and the commands are simply
 
     brew install ffmpeg
-    brew install mplayer
 
 ### `ffmpeg` from source
 This [post](http://jungels.net/articles/ffmpeg-howto.html) provides instructions on building ffmpeg from source. It's likely that one needs the extra libraries installed with XCode to build this from source.
