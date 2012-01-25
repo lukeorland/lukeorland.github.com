@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Luke Orland]]></title>
-  <link href="http://lukeorland.github.com/atom.xml" rel="self"/>
-  <link href="http://lukeorland.github.com/"/>
-  <updated>2012-01-25T01:50:13-05:00</updated>
-  <id>http://lukeorland.github.com/</id>
+  <link href="http://flyorlandic.com/atom.xml" rel="self"/>
+  <link href="http://flyorlandic.com/"/>
+  <updated>2012-01-25T16:28:15-05:00</updated>
+  <id>http://flyorlandic.com/</id>
   <author>
     <name><![CDATA[Luke Orland]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[combined_size_python_script]]></title>
-    <link href="http://lukeorland.github.com/blog/2012/01/25/combined-size-python-script/"/>
+    <link href="http://flyorlandic.com/blog/2012/01/25/combined-size-python-script/"/>
     <updated>2012-01-25T01:36:00-05:00</updated>
-    <id>http://lukeorland.github.com/blog/2012/01/25/combined-size-python-script</id>
+    <id>http://flyorlandic.com/blog/2012/01/25/combined-size-python-script</id>
     <content type="html"><![CDATA[<p>Here is a simple Python script that takes a list of files and prints their combined size in bytes (by default) or megabytes (by specifying the &#8211;mb switch). Code is below.</p>
 
 <!-- more -->
@@ -74,9 +74,9 @@ if __name__ == '__main__':
   
   <entry>
     <title type="html"><![CDATA[transcontinental dance collective]]></title>
-    <link href="http://lukeorland.github.com/blog/2012/01/13/transcontinental-dance-collective/"/>
+    <link href="http://flyorlandic.com/blog/2012/01/13/transcontinental-dance-collective/"/>
     <updated>2012-01-13T20:09:00-05:00</updated>
-    <id>http://lukeorland.github.com/blog/2012/01/13/transcontinental-dance-collective</id>
+    <id>http://flyorlandic.com/blog/2012/01/13/transcontinental-dance-collective</id>
     <content type="html"><![CDATA[<p>Two of my incredibly talented dancer friends embarked on a mission to travel the world learning and teaching dance. Indeed, they traveled many places and creative lovely and inventive dance videos wherever they went. I contributed a basic website to help lend their project a centralized presence on the internet. Mira and Robin have since diverted their attention to a new effort called <em>The Duet Project</em>, and I&#8217;m excited to see what sublime creations the will issue forth.</p>
 
 <p>As for the old website, all my fancy CSS work is gone but most of the content still exists thanks to the Wayback Machine internet archive of <a href="http://web.archive.org/web/20080702030005/http://www.transcontinentaldance.org/">transcontinentaldance.org</a>.</p>
@@ -87,9 +87,9 @@ if __name__ == '__main__':
   
   <entry>
     <title type="html"><![CDATA[mediasite_extract_content]]></title>
-    <link href="http://lukeorland.github.com/blog/2012/01/13/mediasite-extract-content/"/>
+    <link href="http://flyorlandic.com/blog/2012/01/13/mediasite-extract-content/"/>
     <updated>2012-01-13T19:54:00-05:00</updated>
-    <id>http://lukeorland.github.com/blog/2012/01/13/mediasite-extract-content</id>
+    <id>http://flyorlandic.com/blog/2012/01/13/mediasite-extract-content</id>
     <content type="html"><![CDATA[<p>Mediasite is a set of webcasting solutions offered by Sonic Foundry. One of the products in the mediasite family is a lecture capturing platform. The end product provided by Mediasite is an embeddable webplayer that plays the video of lecturer in one window and simultaneously flipping through the slides. Slide transition times occur just as during the original lecture.</p>
 
 <p>I wrote a Python script that parses the content of a Mediasite lecture and creates DV-formatted videos of the lecture and the slideshow. In my case these videos are useful for the sake of combining them into a single video which will then be uploaded to Vimeo. The command line tools <code>ffmpeg</code> and <code>mencoder</code> are required.</p>
@@ -225,9 +225,9 @@ print()
   
   <entry>
     <title type="html"><![CDATA[a knapsack for Vimeo]]></title>
-    <link href="http://lukeorland.github.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/"/>
+    <link href="http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/"/>
     <updated>2012-01-10T09:43:00-05:00</updated>
-    <id>http://lukeorland.github.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1</id>
+    <id>http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1</id>
     <content type="html"><![CDATA[<p>The Vimeo Premium account allows a user to upload up to 5 GB of videos per week. The size of a video cannot be distributed across subsequent weeks. Unused upload space does not roll over to following weeks. My goal is to make the most cost-effective use of the Vimeo Premium account by uploading as close to the full 5 GB as possible every week.</p>
 
 <p>As it turns out, selecting a subset of available video files that combine for the maximum fit within a certain limit is an instance of the <a href="http://en.wikipedia.org/wiki/Knapsack_problem#0-1_knapsack_problem">0-1 knapsack problem</a>. I have taken a crack at implementing a solution for this problem. First, I wrote a 0-1 knapsack solver module (in Python) as well as a command-line Python script that utilizes the solver to determine the optimal list of video files to upload for the week.</p>
