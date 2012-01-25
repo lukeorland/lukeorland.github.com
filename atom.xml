@@ -4,7 +4,7 @@
   <title><![CDATA[Luke Orland]]></title>
   <link href="http://lukeorland.github.com/atom.xml" rel="self"/>
   <link href="http://lukeorland.github.com/"/>
-  <updated>2012-01-14T12:50:15-05:00</updated>
+  <updated>2012-01-25T01:50:13-05:00</updated>
   <id>http://lukeorland.github.com/</id>
   <author>
     <name><![CDATA[Luke Orland]]></name>
@@ -12,6 +12,65 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[combined_size_python_script]]></title>
+    <link href="http://lukeorland.github.com/blog/2012/01/25/combined-size-python-script/"/>
+    <updated>2012-01-25T01:36:00-05:00</updated>
+    <id>http://lukeorland.github.com/blog/2012/01/25/combined-size-python-script</id>
+    <content type="html"><![CDATA[<p>Here is a simple Python script that takes a list of files and prints their combined size in bytes (by default) or megabytes (by specifying the &#8211;mb switch). Code is below.</p>
+
+<!-- more -->
+
+
+
+
+<div><script src='https://gist.github.com/1673391.js?file=combined_size.py'></script>
+<noscript><pre><code>#!/usr/bin/env python
+
+from __future__ import print_function
+import argparse
+import os
+
+def file_size(file_name):
+    &quot;&quot;&quot;Returns size of the file named file_name in bytes.&quot;&quot;&quot;
+    if not os.path.exists(file_name):
+        msg = &quot;The file {} does not exist.&quot;.format(file_name)
+        raise argparse.ArgumentTypeError(msg)
+    return os.path.getsize(file_name)
+
+def bytes_to_MB(bytes):
+    &quot;&quot;&quot;Returns float value&quot;&quot;&quot;
+    return bytes / 1e6
+
+def main():
+    # Parse the command line arguments.
+    parser = argparse.ArgumentParser(description='Prints the combined MB of ' +
+                                     'the files passed as arguments.')
+
+    parser.add_argument('file_names', nargs='*',
+                        help='files that are candidates for fitting')
+    parser.add_argument('--mb', '-m', action='count',
+                        help='prints the total number of bytes instead of MB')
+    args = parser.parse_args()
+    file_names = args.file_names
+    mb = args.mb
+
+    total_size = sum([file_size(fn) for fn in file_names])
+    if mb:
+        print(&quot;{}&quot;.format(total_size))
+    else:
+        print(&quot;{}&quot;.format(bytes_to_MB(total_size)))
+
+if __name__ == '__main__':
+    main()
+
+</code></pre></noscript></div>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[transcontinental dance collective]]></title>
@@ -35,7 +94,7 @@
 
 <p>I wrote a Python script that parses the content of a Mediasite lecture and creates DV-formatted videos of the lecture and the slideshow. In my case these videos are useful for the sake of combining them into a single video which will then be uploaded to Vimeo. The command line tools <code>ffmpeg</code> and <code>mencoder</code> are required.</p>
 
-<p>and here it is.</p>
+<p>Below is more information about installing <code>ffmpeg</code> and <code>mencoder</code>, and the script is as follows.</p>
 
 <!-- more -->
 
@@ -130,7 +189,62 @@ print()
 </code></pre></noscript></div>
 
 
+<h1>Installing <code>ffmpeg</code> and <code>mencoder</code></h1>
 
+<h2>Mac OS X</h2>
+
+<h3><code>mencoder</code> with Homebrew</h3>
+
+<p>A user who has <code>homebrew</code> installed presumably has read/write access to the right system directories, and the commands are simply</p>
+
+<pre><code>brew install mplayer
+</code></pre>
+
+<h3><code>mencoder</code> with downloaded binaries</h3>
+
+<p>Not having read/write access to the right system directories on a certain system, I found a different approach, which is to download the binaries and update the script to use the correct location.</p>
+
+<p>The MEncoder binary can be downloaded from the bottom of this <a href="http://stefpause.com/apple/mac/mplayer-os-x-10rc1-and-mencoder-binaries/">post</a>.</p>
+
+<h3>ffmpeg with Homebrew</h3>
+
+<p>A user who has <code>homebrew</code> installed presumably has read/write access to the right system directories, and the commands are simply</p>
+
+<pre><code>brew install ffmpeg
+</code></pre>
+
+<h3><code>ffmpeg</code> from source</h3>
+
+<p>This <a href="http://jungels.net/articles/ffmpeg-howto.html">post</a> provides instructions on building ffmpeg from source. It&#8217;s likely that one needs the extra libraries installed with XCode to build this from source.</p>
+
+<h3><code>ffmpeg</code> binary</h3>
+
+<p>The ffmpegX project (which seems to be defunct) provides a command-line binary in the OS X package. Download it, install it, and then edit the script to use the <code>ffmpegX</code> binary located at <code>Applications/ffmpegX.app/Contents/MacOS/ffmpegX</code>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[a knapsack for Vimeo]]></title>
+    <link href="http://lukeorland.github.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/"/>
+    <updated>2012-01-10T09:43:00-05:00</updated>
+    <id>http://lukeorland.github.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1</id>
+    <content type="html"><![CDATA[<p>The Vimeo Premium account allows a user to upload up to 5 GB of videos per week. The size of a video cannot be distributed across subsequent weeks. Unused upload space does not roll over to following weeks. My goal is to make the most cost-effective use of the Vimeo Premium account by uploading as close to the full 5 GB as possible every week.</p>
+
+<p>As it turns out, selecting a subset of available video files that combine for the maximum fit within a certain limit is an instance of the <a href="http://en.wikipedia.org/wiki/Knapsack_problem#0-1_knapsack_problem">0-1 knapsack problem</a>. I have taken a crack at implementing a solution for this problem. First, I wrote a 0-1 knapsack solver module (in Python) as well as a command-line Python script that utilizes the solver to determine the optimal list of video files to upload for the week.</p>
+
+<h1>Search space</h1>
+
+<p>To understand how this is a difficult problem to solve, consider the number of possible combinations of files that could comprise a unique subset. Each file is either in each subset or not. That means there are 2<sup>N</sup> possible combinations of candidate files. For a set of 40 files, there would be 2<sup>40</sup> = 1,099,511,627,776 from which an exact optimal subset would be identified.</p>
+
+<h1>Solution</h1>
+
+<p>My first solution uses a pure branch-and-bound recursive algorithm. The weight and profit of each file is its size in bytes, and the capacity of the knapsack is 5000000000 bytes. This approach is much too inefficient, likely due to repeated evaluations of the same subsets in rearranged order.</p>
+
+<h1>Next step</h1>
+
+<p>Alternatively, a well-known dynamic programming algorithm can be employed. I wrote this method. Indeed, it finds the exact solution much more quickly, in O(nW) time and O(W) space, where n is the number of candidate files, and W is the size limit.</p>
+
+<p>The code I have written can be found at <a href="https://github.com/lukeorland/maxfit">github.com/lukeorland/maxfit</a>.</p>
 ]]></content>
   </entry>
   

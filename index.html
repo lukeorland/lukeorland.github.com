@@ -9,7 +9,7 @@
   <meta name="author" content="Luke Orland">
 
   
-  <meta name="description" content="Two of my incredibly talented dancer friends embarked on a mission to travel the world learning and teaching dance. Indeed, they traveled many places &hellip;">
+  <meta name="description" content="Here is a simple Python script that takes a list of files and prints their combined size in bytes (by default) or megabytes (by specifying the &#8211 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +64,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/25/combined-size-python-script/">Combined_size_python_script</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-25T01:36:00-05:00" pubdate data-updated="true">Jan 25<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/01/25/combined-size-python-script/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Here is a simple Python script that takes a list of files and prints their combined size in bytes (by default) or megabytes (by specifying the &#8211;mb switch). Code is below.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/01/25/combined-size-python-script/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -141,7 +184,7 @@
 
 <p>I wrote a Python script that parses the content of a Mediasite lecture and creates DV-formatted videos of the lecture and the slideshow. In my case these videos are useful for the sake of combining them into a single video which will then be uploaded to Vimeo. The command line tools <code>ffmpeg</code> and <code>mencoder</code> are required.</p>
 
-<p>and here it is.</p>
+<p>Below is more information about installing <code>ffmpeg</code> and <code>mencoder</code>, and the script is as follows.</p>
 
 </div>
   
@@ -149,6 +192,60 @@
     <footer>
       <a rel="full-article" href="/blog/2012/01/13/mediasite-extract-content/">Read on &rarr;</a>
     </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/">A Knapsack for Vimeo</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-10T09:43:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The Vimeo Premium account allows a user to upload up to 5 GB of videos per week. The size of a video cannot be distributed across subsequent weeks. Unused upload space does not roll over to following weeks. My goal is to make the most cost-effective use of the Vimeo Premium account by uploading as close to the full 5 GB as possible every week.</p>
+
+<p>As it turns out, selecting a subset of available video files that combine for the maximum fit within a certain limit is an instance of the <a href="http://en.wikipedia.org/wiki/Knapsack_problem#0-1_knapsack_problem">0-1 knapsack problem</a>. I have taken a crack at implementing a solution for this problem. First, I wrote a 0-1 knapsack solver module (in Python) as well as a command-line Python script that utilizes the solver to determine the optimal list of video files to upload for the week.</p>
+
+<h1>Search space</h1>
+
+<p>To understand how this is a difficult problem to solve, consider the number of possible combinations of files that could comprise a unique subset. Each file is either in each subset or not. That means there are 2<sup>N</sup> possible combinations of candidate files. For a set of 40 files, there would be 2<sup>40</sup> = 1,099,511,627,776 from which an exact optimal subset would be identified.</p>
+
+<h1>Solution</h1>
+
+<p>My first solution uses a pure branch-and-bound recursive algorithm. The weight and profit of each file is its size in bytes, and the capacity of the knapsack is 5000000000 bytes. This approach is much too inefficient, likely due to repeated evaluations of the same subsets in rearranged order.</p>
+
+<h1>Next step</h1>
+
+<p>Alternatively, a well-known dynamic programming algorithm can be employed. I wrote this method. Indeed, it finds the exact solution much more quickly, in O(nW) time and O(W) space, where n is the number of candidate files, and W is the size limit.</p>
+
+<p>The code I have written can be found at <a href="https://github.com/lukeorland/maxfit">github.com/lukeorland/maxfit</a>.</p>
+</div>
+  
   
 
 
@@ -167,11 +264,19 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/01/25/combined-size-python-script/">combined_size_python_script</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/01/13/transcontinental-dance-collective/">transcontinental dance collective</a>
       </li>
     
       <li class="post">
         <a href="/blog/2012/01/13/mediasite-extract-content/">mediasite_extract_content</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/">a knapsack for Vimeo</a>
       </li>
     
   </ul>
