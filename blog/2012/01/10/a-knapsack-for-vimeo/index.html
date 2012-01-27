@@ -9,7 +9,7 @@
   <meta name="author" content="Luke Orland">
 
   
-  <meta name="description" content="The Vimeo Premium account allows a user to upload up to 5 GB of videos per week. The size of a video cannot be distributed across subsequent weeks. &hellip;">
+  <meta name="description" content="The Vimeo Premium account allows a user to upload up to 5 GiB of videos per week. The size of a video cannot be distributed across subsequent weeks. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1">
+  <link rel="canonical" href="http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -92,23 +92,25 @@
   </header>
 
 
-<div class="entry-content"><p>The Vimeo Premium account allows a user to upload up to 5 GB of videos per week. The size of a video cannot be distributed across subsequent weeks. Unused upload space does not roll over to following weeks. My goal is to make the most cost-effective use of the Vimeo Premium account by uploading as close to the full 5 GB as possible every week.</p>
+<div class="entry-content"><p>The Vimeo Premium account allows a user to upload up to 5 GiB of videos per week. The size of a video cannot be distributed across subsequent weeks. Unused upload space does not roll over to following weeks. My goal is to make the most cost-effective use of the Vimeo Premium account by uploading as close to the full 5 GiB as possible every week.</p>
 
-<p>As it turns out, selecting a subset of available video files that combine for the maximum fit within a certain limit is an instance of the <a href="http://en.wikipedia.org/wiki/Knapsack_problem#0-1_knapsack_problem">0-1 knapsack problem</a>. I have taken a crack at implementing a solution for this problem. First, I wrote a 0-1 knapsack solver module (in Python) as well as a command-line Python script that utilizes the solver to determine the optimal list of video files to upload for the week.</p>
+<p>As it turns out, selecting a subset of available video files that combine for the maximum fit within a certain limit is an instance of the <a href="http://en.wikipedia.org/wiki/Knapsack_problem#0-1_knapsack_problem">0-1 knapsack problem</a>. I wrote a 0-1 knapsack solver module (in Python) as well as a command-line Python script that utilizes the solver to determine the optimal list of video files to upload for the week.</p>
 
-<h1>Search space</h1>
+<h2>Search space</h2>
 
 <p>To understand how this is a difficult problem to solve, consider the number of possible combinations of files that could comprise a unique subset. Each file is either in each subset or not. That means there are 2<sup>N</sup> possible combinations of candidate files. For a set of 40 files, there would be 2<sup>40</sup> = 1,099,511,627,776 from which an exact optimal subset would be identified.</p>
 
-<h1>Solution</h1>
+<h1>Solver</h1>
 
-<p>My first solution uses a pure branch-and-bound recursive algorithm. The weight and profit of each file is its size in bytes, and the capacity of the knapsack is 5000000000 bytes. This approach is much too inefficient, likely due to repeated evaluations of the same subsets in rearranged order.</p>
+<p>My first solution uses a pure branch-and-bound recursive algorithm. The weight and profit of each file is its size in bytes, and the capacity of the knapsack is 5&times;2<sup>30</sup> = 5,368,709,120 bytes. This approach is much too inefficient, likely due to repeated evaluations of the same subsets in rearranged order.</p>
 
-<h1>Next step</h1>
+<h2>Next step</h2>
 
-<p>Alternatively, a well-known dynamic programming algorithm can be employed. I wrote this method. Indeed, it finds the exact solution much more quickly, in O(nW) time and O(W) space, where n is the number of candidate files, and W is the size limit.</p>
+<p>Alternatively, a well-known dynamic programming algorithm can be employed. I implemented this method, which indeed finds the exact solution much more quickly, in O(nW) time and O(W) space, where n is the number of candidate files, and W is the size limit.</p>
 
 <p>The code I have written can be found at <a href="https://github.com/lukeorland/maxfit">github.com/lukeorland/maxfit</a>.</p>
+
+<p><em>edited Fri Jan 27 13:59:37 EST 2012</em></p>
 </div>
 
 
@@ -139,7 +141,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/" data-via="orluke" data-counturl="http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo/" data-via="orluke" data-counturl="http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -186,7 +188,7 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/">a knapsack for Vimeo</a>
+        <a href="/blog/2012/01/10/a-knapsack-for-vimeo/">a knapsack for Vimeo</a>
       </li>
     
   </ul>
@@ -240,8 +242,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/';
-        var disqus_url = 'http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo-pt-1/';
+        var disqus_identifier = 'http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo/';
+        var disqus_url = 'http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo/';
         var disqus_script = 'embed.js';
       
     (function () {
