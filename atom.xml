@@ -4,7 +4,7 @@
   <title><![CDATA[Luke Orland]]></title>
   <link href="http://flyorlandic.com/atom.xml" rel="self"/>
   <link href="http://flyorlandic.com/"/>
-  <updated>2012-01-27T14:59:00-05:00</updated>
+  <updated>2012-01-27T15:07:26-05:00</updated>
   <id>http://flyorlandic.com/</id>
   <author>
     <name><![CDATA[Luke Orland]]></name>
@@ -234,7 +234,7 @@ print()
 
 <h2>Search space</h2>
 
-<p>To understand how this is a difficult problem to solve, consider the number of possible combinations of files that could comprise a unique subset. Each file is either in each subset or not. That means there are 2<sup>N</sup> possible combinations of candidate files. For a set of 40 files, there would be 2<sup>40</sup> = 1,099,511,627,776 from which an exact optimal subset would be identified.</p>
+<p>To understand how this is a difficult problem to solve, consider the number of possible combinations of <em>N</em> files that could comprise a unique subset. Each file is either in each subset or not. That means there are 2<sup><em>N</em></sup> possible combinations of candidate files. For a set of 40 files, there would be 2<sup>40</sup> = 1,099,511,627,776 possibilities from which an exact optimal subset would be identified.</p>
 
 <h1>Solver</h1>
 
@@ -242,11 +242,11 @@ print()
 
 <h2>Next step</h2>
 
-<p>Alternatively, a well-known dynamic programming algorithm can be employed. I implemented this method, which indeed finds the exact solution much more quickly, in O(nW) time and O(W) space, where n is the number of candidate files, and W is the size limit.</p>
+<p>Alternatively, a well-known dynamic programming algorithm can be employed. I implemented this method, which indeed finds the exact solution much more quickly, in <em>O</em>(<em>NW</em>) time and <em>O</em>(<em>W</em>) space, where <em>N</em> is the number of candidate files, and <em>W</em> is the size limit.</p>
 
 <p>The code I have written can be found at <a href="https://github.com/lukeorland/maxfit">github.com/lukeorland/maxfit</a>.</p>
 
-<p><em>edited Fri Jan 27 13:59:37 EST 2012</em></p>
+<p><em>edited Fri Jan 27 15:05:40 EST 2012</em></p>
 ]]></content>
   </entry>
   
