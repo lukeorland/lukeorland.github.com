@@ -28,6 +28,9 @@
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript"
+	src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
   
 
@@ -96,17 +99,14 @@
 
 <p>As it turns out, selecting a subset of available video files that combine for the maximum fit within a certain limit is an instance of the <a href="http://en.wikipedia.org/wiki/Knapsack_problem#0-1_knapsack_problem">0-1 knapsack problem</a>. I wrote a 0-1 knapsack solver module (in Python) as well as a command-line Python script that utilizes the solver to determine the optimal list of video files to upload for the week.</p>
 
-<h2>Search space</h2>
+<h2 id="search-space">Search space</h2>
+<p>To understand how this is a difficult problem to solve, consider the number of possible combinations of <script type="math/tex">N</script> files that could comprise a unique subset. Each file is either in each subset or not. That means there are <script type="math/tex">2^N</script> possible combinations of candidate files. For a set of 40 files, there would be <script type="math/tex">2^{40} = 1,099,511,627,776</script> possibilities from which an exact optimal subset would be identified.</p>
 
-<p>To understand how this is a difficult problem to solve, consider the number of possible combinations of <em>N</em> files that could comprise a unique subset. Each file is either in each subset or not. That means there are 2<sup><em>N</em></sup> possible combinations of candidate files. For a set of 40 files, there would be 2<sup>40</sup> = 1,099,511,627,776 possibilities from which an exact optimal subset would be identified.</p>
+<h1 id="solver">Solver</h1>
+<p>My first solution uses a pure branch-and-bound recursive algorithm. The weight and profit of each file is its size in bytes, and the capacity of the knapsack is <script type="math/tex">5\times 2^{30} = 5,368,709,120</script> bytes. This approach is much too inefficient, likely due to repeated evaluations of the same subsets in rearranged order.</p>
 
-<h1>Solver</h1>
-
-<p>My first solution uses a pure branch-and-bound recursive algorithm. The weight and profit of each file is its size in bytes, and the capacity of the knapsack is 5&times;2<sup>30</sup> = 5,368,709,120 bytes. This approach is much too inefficient, likely due to repeated evaluations of the same subsets in rearranged order.</p>
-
-<h2>Next step</h2>
-
-<p>Alternatively, a well-known dynamic programming algorithm can be employed. I implemented this method, which indeed finds the exact solution much more quickly, in <em>O</em>(<em>NW</em>) time and <em>O</em>(<em>W</em>) space, where <em>N</em> is the number of candidate files, and <em>W</em> is the size limit.</p>
+<h2 id="next-step">Next step</h2>
+<p>Alternatively, a well-known dynamic programming algorithm can be employed. I implemented this method, which indeed finds the exact solution much more quickly, in <script type="math/tex">O(NW)</script> time and <script type="math/tex">O(W)</script> space, where <script type="math/tex">N</script> is the number of candidate files, and <script type="math/tex">W</script> is the size limit.</p>
 
 <p>The code I have written can be found at <a href="https://github.com/lukeorland/maxfit">github.com/lukeorland/maxfit</a>.</p>
 

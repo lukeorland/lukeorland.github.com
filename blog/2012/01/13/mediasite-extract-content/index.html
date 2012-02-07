@@ -28,6 +28,9 @@
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript"
+	src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
   
 
@@ -100,10 +103,7 @@
 
 <!-- more -->
 
-
-
-
-<div><script src='https://gist.github.com/1609649.js?file=mediasite_slides_movie.py'></script>
+<div><script src="https://gist.github.com/1609649.js?file=mediasite_slides_movie.py"></script>
 <noscript><pre><code># Convert a Mediasite content for a lecture into two DV-formatted videos:
 #   one from the lecture
 #   one of the slideshow with timings extracted from the Mediasite content.
@@ -190,38 +190,32 @@ print()
 
 </code></pre></noscript></div>
 
-
-<h1>Installing <code>ffmpeg</code> and <code>mencoder</code></h1>
-
-<h2>Mac OS X</h2>
-
-<h3><code>mencoder</code> with Homebrew</h3>
-
-<p>A user who has <code>homebrew</code> installed presumably has read/write access to the right system directories, and the commands are simply</p>
+<h1 id="installing-ffmpeg-and-mencoder">Installing <code>ffmpeg</code> and <code>mencoder</code></h1>
+<p>## Mac OS X
+### <code>mencoder</code> with Homebrew
+A user who has <code>homebrew</code> installed presumably has read/write access to the right system directories, and the commands are simply</p>
 
 <pre><code>brew install mplayer
 </code></pre>
 
-<h3><code>mencoder</code> with downloaded binaries</h3>
-
+<h3 id="mencoder-with-downloaded-binaries"><code>mencoder</code> with downloaded binaries</h3>
 <p>Not having read/write access to the right system directories on a certain system, I found a different approach, which is to download the binaries and update the script to use the correct location.</p>
 
 <p>The MEncoder binary can be downloaded from the bottom of this <a href="http://stefpause.com/apple/mac/mplayer-os-x-10rc1-and-mencoder-binaries/">post</a>.</p>
 
-<h3>ffmpeg with Homebrew</h3>
-
+<h3 id="ffmpeg-with-homebrew">ffmpeg with Homebrew</h3>
 <p>A user who has <code>homebrew</code> installed presumably has read/write access to the right system directories, and the commands are simply</p>
 
 <pre><code>brew install ffmpeg
 </code></pre>
 
-<h3><code>ffmpeg</code> from source</h3>
+<h3 id="ffmpeg-from-source"><code>ffmpeg</code> from source</h3>
+<p>This <a href="http://jungels.net/articles/ffmpeg-howto.html">post</a> provides instructions on building ffmpeg from source. It’s likely that one needs the extra libraries installed with XCode to build this from source.</p>
 
-<p>This <a href="http://jungels.net/articles/ffmpeg-howto.html">post</a> provides instructions on building ffmpeg from source. It&#8217;s likely that one needs the extra libraries installed with XCode to build this from source.</p>
-
-<h3><code>ffmpeg</code> binary</h3>
+<h3 id="ffmpeg-binary"><code>ffmpeg</code> binary</h3>
 
 <p>The ffmpegX project (which seems to be defunct) provides a command-line binary in the OS X package. Download it, install it, and then edit the script to use the <code>ffmpegX</code> binary located at <code>Applications/ffmpegX.app/Contents/MacOS/ffmpegX</code>.</p>
+
 </div>
 
 
