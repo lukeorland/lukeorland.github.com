@@ -4,7 +4,7 @@
   <title><![CDATA[Luke Orland]]></title>
   <link href="http://flyorlandic.com/atom.xml" rel="self"/>
   <link href="http://flyorlandic.com/"/>
-  <updated>2012-02-12T13:07:48-05:00</updated>
+  <updated>2012-02-26T11:13:04-05:00</updated>
   <id>http://flyorlandic.com/</id>
   <author>
     <name><![CDATA[Luke Orland]]></name>
@@ -12,6 +12,20 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Doxygen 1.8.0, Markdown, and the OS X app]]></title>
+    <link href="http://flyorlandic.com/blog/2012/02/26/doxygen-app/"/>
+    <updated>2012-02-26T10:48:00-05:00</updated>
+    <id>http://flyorlandic.com/blog/2012/02/26/doxygen-app</id>
+    <content type="html"><![CDATA[<p>Doxygen’s brand new support of Markdown has attracted my attention. I tried out the Doxygen.app for OS X. This app did not match my expectations in a couple ways:</p>
+
+<ul>
+  <li>It does not automatically load up the <code>Doxyfile</code> located in the specified base project directory, nor does there seem to be any way for it to read that configuration file. In this way Doxygen.app seems to be intended merely as a tool for initial setup of the configuration. When closing Doxygen.app, the configuration can be saved, and revisions must be made to the to the saved configuration file via a text editor.</li>
+  <li>Doxygen 1.8.0 newly supports the Markdown format. However, Doxygen.app does not know to look for <code>*.markdown</code> or <code>*.md</code> source files. Those filename matching patterns must be added to the list in <em>Expert</em> -&gt; <em>Input</em> -&gt; <em>FILE_PATTERNS</em>.</li>
+</ul>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[combined_size_python_script]]></title>

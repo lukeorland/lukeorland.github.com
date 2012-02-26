@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>combined_size_python_script - Luke Orland</title>
+  <title>Doxygen 1.8.0, Markdown, and the OS X app - Luke Orland</title>
   <meta name="author" content="Luke Orland">
 
   
-  <meta name="description" content="Here is a simple Python script that takes a list of files and prints their combined size in bytes (by default) or megabytes (by specifying the –mb &hellip;">
+  <meta name="description" content="Doxygen’s brand new support of Markdown has attracted my attention. I tried out the Doxygen.app for OS X. This app did not match my expectations in a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://flyorlandic.com/blog/2012/01/25/combined-size-python-script">
+  <link rel="canonical" href="http://flyorlandic.com/blog/2012/02/26/doxygen-app">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -79,7 +79,7 @@
   
   <header>
     
-      <h1 class="entry-title">Combined_size_python_script</h1>
+      <h1 class="entry-title">Doxygen 1.8.0, Markdown, and the OS X App</h1>
     
     
       <p class="meta">
@@ -95,7 +95,7 @@
   
 
 
-<time datetime="2012-01-25T01:36:00-05:00" pubdate data-updated="true">Jan 25<span>th</span>, 2012</time>
+<time datetime="2012-02-26T10:48:00-05:00" pubdate data-updated="true">Feb 26<span>th</span>, 2012</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -104,51 +104,12 @@
   </header>
 
 
-<div class="entry-content"><p>Here is a simple Python script that takes a list of files and prints their combined size in bytes (by default) or megabytes (by specifying the –mb switch). Code is below.
-<!-- more --></p>
+<div class="entry-content"><p>Doxygen’s brand new support of Markdown has attracted my attention. I tried out the Doxygen.app for OS X. This app did not match my expectations in a couple ways:</p>
 
-<div><script src="https://gist.github.com/1673391.js?file=combined_size.py"></script>
-<noscript><pre><code>#!/usr/bin/env python
-
-from __future__ import print_function
-import argparse
-import os
-
-def file_size(file_name):
-    &quot;&quot;&quot;Returns size of the file named file_name in bytes.&quot;&quot;&quot;
-    if not os.path.exists(file_name):
-        msg = &quot;The file {} does not exist.&quot;.format(file_name)
-        raise argparse.ArgumentTypeError(msg)
-    return os.path.getsize(file_name)
-
-def bytes_to_MB(bytes):
-    &quot;&quot;&quot;Returns float value&quot;&quot;&quot;
-    return bytes / 1e6
-
-def main():
-    # Parse the command line arguments.
-    parser = argparse.ArgumentParser(description='Prints the combined MB of ' +
-                                     'the files passed as arguments.')
-
-    parser.add_argument('file_names', nargs='*',
-                        help='files that are candidates for fitting')
-    parser.add_argument('--mb', '-m', action='count',
-                        help='prints the total number of bytes instead of MB')
-    args = parser.parse_args()
-    file_names = args.file_names
-    mb = args.mb
-
-    total_size = sum([file_size(fn) for fn in file_names])
-    if mb:
-        print(&quot;{}&quot;.format(total_size))
-    else:
-        print(&quot;{}&quot;.format(bytes_to_MB(total_size)))
-
-if __name__ == '__main__':
-    main()
-
-</code></pre></noscript></div>
-
+<ul>
+  <li>It does not automatically load up the <code>Doxyfile</code> located in the specified base project directory, nor does there seem to be any way for it to read that configuration file. In this way Doxygen.app seems to be intended merely as a tool for initial setup of the configuration. When closing Doxygen.app, the configuration can be saved, and revisions must be made to the to the saved configuration file via a text editor.</li>
+  <li>Doxygen 1.8.0 newly supports the Markdown format. However, Doxygen.app does not know to look for <code>*.markdown</code> or <code>*.md</code> source files. Those filename matching patterns must be added to the list in <em>Expert</em> -&gt; <em>Input</em> -&gt; <em>FILE_PATTERNS</em>.</li>
+</ul>
 </div>
 
 
@@ -171,7 +132,7 @@ if __name__ == '__main__':
   
 
 
-<time datetime="2012-01-25T01:36:00-05:00" pubdate data-updated="true">Jan 25<span>th</span>, 2012</time>
+<time datetime="2012-02-26T10:48:00-05:00" pubdate data-updated="true">Feb 26<span>th</span>, 2012</time>
       
 
 
@@ -179,7 +140,7 @@ if __name__ == '__main__':
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://flyorlandic.com/blog/2012/01/25/combined-size-python-script/" data-via="orluke" data-counturl="http://flyorlandic.com/blog/2012/01/25/combined-size-python-script/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://flyorlandic.com/blog/2012/02/26/doxygen-app/" data-via="orluke" data-counturl="http://flyorlandic.com/blog/2012/02/26/doxygen-app/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -192,10 +153,8 @@ if __name__ == '__main__':
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/01/13/transcontinental-dance-collective/" title="Previous Post: transcontinental dance collective">&laquo; transcontinental dance collective</a>
+        <a class="basic-alignment left" href="/blog/2012/01/25/combined-size-python-script/" title="Previous Post: combined_size_python_script">&laquo; combined_size_python_script</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/02/26/doxygen-app/" title="Next Post: Doxygen 1.8.0, Markdown, and the OS X app">Doxygen 1.8.0, Markdown, and the OS X app &raquo;</a>
       
     </p>
   </footer>
@@ -277,8 +236,8 @@ if __name__ == '__main__':
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://flyorlandic.com/blog/2012/01/25/combined-size-python-script/';
-        var disqus_url = 'http://flyorlandic.com/blog/2012/01/25/combined-size-python-script/';
+        var disqus_identifier = 'http://flyorlandic.com/blog/2012/02/26/doxygen-app/';
+        var disqus_url = 'http://flyorlandic.com/blog/2012/02/26/doxygen-app/';
         var disqus_script = 'embed.js';
       
     (function () {

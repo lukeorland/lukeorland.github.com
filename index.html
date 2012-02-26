@@ -9,7 +9,7 @@
   <meta name="author" content="Luke Orland">
 
   
-  <meta name="description" content="Here is a simple Python script that takes a list of files and prints their combined size in bytes (by default) or megabytes (by specifying the –mb &hellip;">
+  <meta name="description" content="Doxygen’s brand new support of Markdown has attracted my attention. I tried out the Doxygen.app for OS X. This app did not match my expectations in a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -28,9 +28,6 @@
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<script type="text/javascript"
-	src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
 
   
   <script type="text/javascript">
@@ -79,6 +76,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/26/doxygen-app/">Doxygen 1.8.0, Markdown, and the OS X App</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-26T10:48:00-05:00" pubdate data-updated="true">Feb 26<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/02/26/doxygen-app/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Doxygen’s brand new support of Markdown has attracted my attention. I tried out the Doxygen.app for OS X. This app did not match my expectations in a couple ways:</p>
+
+<ul>
+  <li>It does not automatically load up the <code>Doxyfile</code> located in the specified base project directory, nor does there seem to be any way for it to read that configuration file. In this way Doxygen.app seems to be intended merely as a tool for initial setup of the configuration. When closing Doxygen.app, the configuration can be saved, and revisions must be made to the to the saved configuration file via a text editor.</li>
+  <li>Doxygen 1.8.0 newly supports the Markdown format. However, Doxygen.app does not know to look for <code>*.markdown</code> or <code>*.md</code> source files. Those filename matching patterns must be added to the list in <em>Expert</em> -&gt; <em>Input</em> -&gt; <em>FILE_PATTERNS</em>.</li>
+</ul>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -275,6 +315,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/02/26/doxygen-app/">Doxygen 1.8.0, Markdown, and the OS X app</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2012/01/25/combined-size-python-script/">combined_size_python_script</a>
