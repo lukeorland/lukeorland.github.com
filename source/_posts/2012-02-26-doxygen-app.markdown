@@ -6,7 +6,7 @@ comments: true
 categories: 
 ---
 
-Doxygen's brand new support of Markdown has attracted my attention. I tried out the Doxygen.app for OS X. This app did not match my expectations in a couple ways:
+Doxygen's brand new support of Markdown has attracted my attention. I tried out the Doxygen.app for OS X. Here are a couple of notes-to-self about this Doxywizard GUI.
 
-* It does not automatically load up the `Doxyfile` located in the specified base project directory, nor does there seem to be any way for it to read that configuration file. In this way Doxygen.app seems to be intended merely as a tool for initial setup of the configuration. When closing Doxygen.app, the configuration can be saved, and revisions must be made to the to the saved configuration file via a text editor.
 * Doxygen 1.8.0 newly supports the Markdown format. However, Doxygen.app does not know to look for `*.markdown` or `*.md` source files. Those filename matching patterns must be added to the list in *Expert* -> *Input* -> *FILE_PATTERNS*.
+* It does not automatically load up the `Doxyfile` located in the specified base project directory. Use the Doxywizard menu to open or save the configuration.
