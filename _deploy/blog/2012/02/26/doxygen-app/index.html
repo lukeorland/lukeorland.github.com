@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Doxygen 1.8.0, Markdown, and the OS X app - Luke Orland</title>
+  <meta name="author" content="Luke Orland">
+
+  
+  <meta name="description" content="Doxygen’s brand new support of Markdown has attracted my attention. I tried out the Doxygen.app for OS X. Here are a couple of notes-to-self about &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://flyorlandic.com/blog/2012/02/26/doxygen-app">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Luke Orland" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-29142266-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Luke Orland</a></h1>
+  
+    <h2>polyglot programs</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:flyorlandic.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Doxygen 1.8.0, Markdown, and the OS X App</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-26T10:48:00-05:00" pubdate data-updated="true">Feb 26<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Doxygen’s brand new support of Markdown has attracted my attention. I tried out the Doxygen.app for OS X. Here are a couple of notes-to-self about this Doxywizard GUI.</p>
+
+<ul>
+  <li>Doxygen 1.8.0 newly supports the Markdown format. However, Doxygen.app does not know to look for <code>*.markdown</code> or <code>*.md</code> source files. Those filename matching patterns must be added to the list in <em>Expert</em> -&gt; <em>Input</em> -&gt; <em>FILE_PATTERNS</em>.</li>
+  <li>It does not automatically load up the <code>Doxyfile</code> located in the specified base project directory. Use the Doxywizard menu to open or save the configuration.</li>
+</ul>
+
+<p>Also, I was getting an error message when configuring the dot output to pdf:</p>
+
+<pre><code>Format: "pdf" not recognized. Use one of: canon cmap cmapx cmapx_np dot eps fig gd gd2 gif gv imap imap_np ismap jpe jpeg jpg plain plain-ext png ps ps2 svg svgz tk vml vmlz vrml wbmp xdot
+Problems running dot: exit code=1, command='/usr/local/bin/dot'`
+</code></pre>
+
+<p>The solution is to reinstall graphviz, building it with Cairo/Pango support.</p>
+
+<p>From this <a href="https://github.com/voormedia/rails-erd/issues/12#issuecomment-1145048">comment</a>:</p>
+
+<blockquote>
+  <ul>
+    <li>Uninstall Cairo, Pango and Graphviz (<code>brew uninstall cairo pango graphviz</code>)</li>
+    <li>Install Cairo, Pango and Graphviz, exactly in this order (<code>brew install cairo pango graphviz</code>)</li>
+  </ul>
+</blockquote>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Luke Orland</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-26T10:48:00-05:00" pubdate data-updated="true">Feb 26<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://flyorlandic.com/blog/2012/02/26/doxygen-app/" data-via="orluke" data-counturl="http://flyorlandic.com/blog/2012/02/26/doxygen-app/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/01/25/combined-size-python-script/" title="Previous Post: combined_size_python_script">&laquo; combined_size_python_script</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/07/03/low-resource-languages/" title="Next Post: Low Resource Languages">Low Resource Languages &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/09/masters-thesis/">Master's Thesis</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/03/low-resource-languages/">Low Resource Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/02/26/doxygen-app/">Doxygen 1.8.0, Markdown, and the OS X app</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/25/combined-size-python-script/">combined_size_python_script</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/13/transcontinental-dance-collective/">transcontinental dance collective</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("orluke", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/orluke" class="twitter-follow-button" data-show-count="false">Follow @orluke</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Luke Orland -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'flyorlandic';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://flyorlandic.com/blog/2012/02/26/doxygen-app/';
+        var disqus_url = 'http://flyorlandic.com/blog/2012/02/26/doxygen-app/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

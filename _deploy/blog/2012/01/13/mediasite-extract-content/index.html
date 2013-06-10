@@ -1,0 +1,616 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>mediasite_extract_content - Luke Orland</title>
+  <meta name="author" content="Luke Orland">
+
+  
+  <meta name="description" content="Mediasite is a set of webcasting solutions offered by Sonic Foundry. One of the products in the mediasite family is a lecture capturing platform. The &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://flyorlandic.com/blog/2012/01/13/mediasite-extract-content">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Luke Orland" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-29142266-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Luke Orland</a></h1>
+  
+    <h2>polyglot programs</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:flyorlandic.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Mediasite_extract_content</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-13T19:54:00-05:00" pubdate data-updated="true">Jan 13<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Mediasite is a set of webcasting solutions offered by Sonic Foundry. One of the products in the mediasite family is a lecture capturing platform. The end product provided by Mediasite is an embeddable webplayer that plays the video of lecturer in one window and simultaneously flipping through the slides. Slide transition times occur just as during the original lecture.</p>
+
+<p>I wrote a Python script that parses the content of a Mediasite lecture and creates DV-formatted videos of the lecture and the slideshow. In my case these videos are useful for the sake of combining them into a single video which will then be uploaded to Vimeo. The command line tools <code>ffmpeg</code> and <code>mencoder</code> are required.</p>
+
+<p>Below is more information about installing <code>ffmpeg</code> and <code>mencoder</code>, and the script is as follows.</p>
+
+<!-- more -->
+
+<div><script src="https://gist.github.com/1609649.js?file=mediasite_slides_movie.py"></script>
+<noscript><pre><code>#!/usr/bin/env python
+
+# Convert Mediasite content for a lecture into two DV-formatted videos:
+#   one from the lecture
+#   one of the slideshow with timings extracted from the Mediasite content.
+#
+# Usage: run this Python script from the root directory of the Mediasite
+# content.
+# It's the directory that contains the directories and files as follows:
+# App_Themes/    Content/       Player.html   PlayerOptions/     Players/
+# The output files will be written in the same directory.
+#
+# Luke Orland
+# Sat Jan 14 11:44:32 EST 2012
+
+from __future__ import print_function
+import argparse
+import os
+import re
+import shlex
+import subprocess
+import sys
+
+parser = argparse.ArgumentParser(description='pre-process Mediasite content ' +
+                                 'for import to Final Cut Pro')
+
+parser.add_argument('--mencoder', action='store', dest='mencoder_loc',
+                    default='mencoder',
+                    help='Custom location of mencoder')
+
+parser.add_argument('--ffmbc', action='store', dest='ffmbc_loc',
+                    default='ffmbc',
+                    help='Custom location of ffmbc')
+
+parser.add_argument('-i', '--input_dir', action='store', dest='input_dir',
+                    default='.',
+                    help='Root directory of a the content bundle for a ' +
+                    'Mediasite recording. Probably is something like ' +
+                    '/path/to/Untitled-1234/ or similar.',)
+
+parser.add_argument('-o', '--output_dir', action='store', dest='output_dir',
+                    default='.',
+                    help='Output directory for the resulting file(s)')
+
+parser.add_argument('--slides_avi', action='store_true', default=False,
+                    help='Convert the slides jpg files to an AVI video')
+
+parser.add_argument('--slides_fps', action='store', type=float,
+                    default='5',
+                    help='Frames per second in the slides AVI file')
+
+parser.add_argument('--slides_prores', action='store_true', default=False,
+                    help='Convert the slides AVI video to ProRes format')
+
+parser.add_argument('--video_prores', action='store_true', default=False,
+                    help='Convert the lecturer WMV video to ProRes format')
+
+parser.add_argument('-e', '--everything', action='store_true', default=False,
+                    help='Convert everything')
+
+parser.add_argument('--print_times', action='store_true', default=False,
+                    help='print out a list of slide transition times.')
+
+group = parser.add_mutually_exclusive_group()
+group.add_argument('--dim800x600', action='store_true')
+group.add_argument('--dim1280x1024', action='store_true')
+group.add_argument('--dim1024x768', action='store_true')
+
+args = parser.parse_args()
+
+mencoder= args.mencoder_loc
+ffmbc= args.ffmbc_loc
+input_path = os.path.abspath(args.input_dir)
+content_dir = os.path.join(input_path, 'Content')
+output_path = os.path.abspath(args.output_dir)
+
+slides_fps = args.slides_fps
+
+slides_avi_file_path = os.path.join(output_path, 'slides.avi')
+
+content_dir_files = os.listdir(content_dir)
+for file in content_dir_files:
+    file_name, file_extension = os.path.splitext(file)
+    if file_extension == '.wmv':
+        video_wmv_file_path = os.path.join(content_dir, file_name + file_extension)
+
+slides_prores_file_path = os.path.join(output_path, 'slides_prores.mov')
+video_prores_file_path = os.path.join(output_path, 'video_prores.mov')
+
+jpg_frames_file_path = os.path.join(output_path, 'jpg_frames.txt')
+
+if args.everything:
+    to_make_slides_avi = True
+    to_make_slides_prores = True
+    to_make_video_prores = True
+else:
+    to_make_slides_avi = args.slides_avi
+    to_make_slides_prores = args.slides_prores
+    to_make_video_prores = args.video_prores
+
+# ProRes output settings
+prores_fps = '-r 25'
+video_prores_frame_dims = '-s 960x720'
+
+
+# use the crop args for debugging, to make 5 second ProRes files.
+#prores_crop_args = '-ss 0 -t 5'
+prores_crop_args = ''
+
+prores_threads = '-threads 16'
+prores_profile = '-profile hq'
+slides_prores_frame_dims = '-s 900x720'
+if args.dim800x600 or args.dim1024x768:
+    print(&quot;4 x 3 aspect ratio&quot;)
+    if args.dim800x600:
+        mf_dimensions_and_fps = '-mf w=800:h=600:fps=' + str(slides_fps) + ':type=jpg'
+    if args.dim1024x768:
+        mf_dimensions_and_fps = '-mf w=1024:h=768:fps=' + str(slides_fps) + ':type=jpg'
+    slides_prores_slides_letterbox = ''
+    # 960x720 output size
+    slides_prores_frame_dims = video_prores_frame_dims
+else: # args.dim1280x1024
+    print(&quot;5 x 4 aspect ratio&quot;)
+    mf_dimensions_and_fps = '-mf w=1280:h=1024:fps=' + str(slides_fps) + ':type=jpg'
+    slides_prores_slides_letterbox = '-vf pad=960:720:30:0:black'
+
+
+def get_duration_ms():
+    &quot;&quot;&quot;Read the duration time from the Players/Scripts/standalone-manifest.js
+    file.
+    &quot;&quot;&quot;
+    transition_times_file_path = os.path.join(input_path, 'Players', 'Scripts',
+                                            'standalone-manifest.js')
+    re_duration_ms = re.compile('\s*Manifest\.Duration=(\d+);')
+    with open(transition_times_file_path) as fh:
+        for line in fh.readlines():
+            match = re_duration_ms.match(line)
+            if match is not None:
+                duration_ms = int(match.group(1))
+    return duration_ms
+
+
+def get_transition_times_ms():
+    &quot;&quot;&quot;Read the transition times from the Players/Scripts/standalone-manifest.js
+    file.
+    &quot;&quot;&quot;
+    transition_times_file_path = os.path.join(input_path, 'Players', 'Scripts',
+                                            'standalone-manifest.js')
+    re_slide_xstn_ms = re.compile('\s*Manifest\.Slides\[\d+\] = new Slide\(&quot;&quot;,(\d+),&quot;&quot;\);')
+    transition_times_ms = []
+    with open(transition_times_file_path) as fh:
+        for line in fh.readlines():
+            match = re_slide_xstn_ms.match(line)
+            if match is not None:
+                transition_times_ms.append(int(match.group(1)))
+    return transition_times_ms
+
+
+def write_jpgs_list():
+    # Count the number of JPG files in the Content directory.
+    list_jpgs = sorted([file for file in os.listdir(content_dir) if
+                        file.lower().endswith('.jpg')])
+    list_jpgs.insert(0, list_jpgs[0])
+    list_jpgs.append(list_jpgs[-1])
+
+    trans_times_ms = get_transition_times_ms()
+    duration_ms = get_duration_ms()
+    trans_times_ms.append(duration_ms)
+
+    # Index into list_jpgs
+    jpg_idx = 0
+
+    # Number of milliseconds elapsed
+    ms = 0
+
+    # The length of time to show each frame
+    frame_duration = 1000.0 / slides_fps
+
+    output_lines = []
+    for trans_time in trans_times_ms:
+
+        while ms &lt;= trans_time:
+
+            output_lines.append(list_jpgs[jpg_idx])
+            ms += frame_duration
+
+        # Advance the frame.
+        #print(&quot;{}\t{}&quot;.format(time_formatter(int(ms)), list_jpgs[jpg_idx]))
+        jpg_idx += 1
+
+    with open(jpg_frames_file_path, 'w') as fh:
+        lines_str = &quot;\n&quot;.join(output_lines)
+        fh.write(lines_str)
+
+
+def do_slides_avi():
+    write_jpgs_list()
+    # Use that text file with the MEncoder script to turn the JPGs into an AVI.
+    print(slides_avi_file_path)
+    cmd = ' '.join([mencoder,
+                    'mf://@' + jpg_frames_file_path,
+                    mf_dimensions_and_fps,
+                    #'-mf w=1280:h=1024:fps=1:type=jpg',
+                    #'-ovc lavc',
+                    #'-lavcopts vcodec=mpeg4:mbd=2:trell',
+                    '-ovc copy',
+                    '-oac copy',
+                    '-o', slides_avi_file_path])
+    print(cmd)
+    args = shlex.split(cmd)
+    p = subprocess.Popen(args, cwd=content_dir)
+    p.wait()
+    print()
+
+
+def do_slides_prores():
+    '''Use ffmbc to convert the slides AVI into ProRes.'''
+    cmd = ' '.join([ffmbc,
+                    prores_threads,
+                    '-y',
+                    prores_crop_args,
+                    '-i',
+                    slides_avi_file_path,
+                    '-vcodec prores',
+                    prores_profile,
+                    prores_fps,
+                    slides_prores_frame_dims,
+                    slides_prores_slides_letterbox,
+                    '-acodec copy',
+                    slides_prores_file_path])
+    print(cmd)
+    args = shlex.split(cmd)
+    p = subprocess.Popen(args, cwd=output_path)
+    print()
+
+
+def do_video_prores():
+    '''Use ffmbc to convert the WMV lecture video into DV.'''
+    cmd = ' '.join([ffmbc,
+                    prores_threads,
+                    '-y',
+                    prores_crop_args,
+                    '-i',
+                    video_wmv_file_path,
+                    '-vcodec prores',
+                    prores_profile,
+                    prores_fps,
+                    video_prores_frame_dims,
+                    '-acodec pcm_s16le',
+                    video_prores_file_path])
+    print(cmd)
+    args = shlex.split(cmd)
+    p = subprocess.Popen(args, cwd=output_path)
+
+
+def time_formatter(time):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; time_formatter(61000)
+    1:01.0
+    &quot;&quot;&quot;
+    mins = time / 60000
+    secs = time % 60000 / 1000
+    msecs = time % 60000 % 1000
+    return &quot;{0}:{1:02d}.{2:01d}&quot;.format(mins, secs, msecs)
+
+
+def do_print_video_length():
+    print(&quot;\nDuration: {} minutes&quot;.format(time_formatter(get_duration_ms())))
+
+
+def do_print_trans_times(trans_times):
+    # Loop through, printing out slide number \t timestamp
+    slide_idx = 0
+    for time in trans_times:
+        slide_idx += 1
+        print(&quot;{0:04d}\t{1}&quot;.format(slide_idx, time_formatter(time)))
+
+
+if __name__ == '__main__':
+    # Start lecture video conversion first, since it takes the longest to finish.
+    if to_make_video_prores:
+        do_video_prores()
+
+    if to_make_slides_avi:
+        do_slides_avi()
+
+    if to_make_slides_prores:
+        if not os.path.exists(slides_avi_file_path):
+            print(&quot;Cannot create slides ProRes: slides.avi does not exist.&quot;)
+            sys.exit(1)
+        do_slides_prores()
+
+    if args.print_times:
+        do_print_trans_times(get_transition_times_ms())
+        do_print_video_length()
+</code></pre></noscript></div>
+
+<h1 id="installing-ffmpeg-and-mencoder">Installing <code>ffmpeg</code> and <code>mencoder</code></h1>
+<p>## Mac OS X
+### <code>mencoder</code> with Homebrew
+A user who has <code>homebrew</code> installed presumably has read/write access to the right system directories, and the commands are simply</p>
+
+<pre><code>brew install mplayer
+</code></pre>
+
+<h3 id="mencoder-with-downloaded-binaries"><code>mencoder</code> with downloaded binaries</h3>
+<p>Not having read/write access to the right system directories on a certain system, I found a different approach, which is to download the binaries and update the script to use the correct location.</p>
+
+<p>The MEncoder binary can be downloaded from the bottom of this <a href="http://stefpause.com/apple/mac/mplayer-os-x-10rc1-and-mencoder-binaries/">post</a>.</p>
+
+<h3 id="ffmpeg-with-homebrew">ffmpeg with Homebrew</h3>
+<p>A user who has <code>homebrew</code> installed presumably has read/write access to the right system directories, and the commands are simply</p>
+
+<pre><code>brew install ffmpeg
+</code></pre>
+
+<h3 id="ffmpeg-from-source"><code>ffmpeg</code> from source</h3>
+<p>This <a href="http://jungels.net/articles/ffmpeg-howto.html">post</a> provides instructions on building ffmpeg from source. It’s likely that one needs the extra libraries installed with XCode to build this from source.</p>
+
+<h3 id="ffmpeg-binary"><code>ffmpeg</code> binary</h3>
+
+<p>The ffmpegX project (which seems to be defunct) provides a command-line binary in the OS X package. Download it, install it, and then edit the script to use the <code>ffmpegX</code> binary located at <code>Applications/ffmpegX.app/Contents/MacOS/ffmpegX</code>.</p>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Luke Orland</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-13T19:54:00-05:00" pubdate data-updated="true">Jan 13<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://flyorlandic.com/blog/2012/01/13/mediasite-extract-content/" data-via="orluke" data-counturl="http://flyorlandic.com/blog/2012/01/13/mediasite-extract-content/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/01/10/a-knapsack-for-vimeo/" title="Previous Post: a knapsack for Vimeo">&laquo; a knapsack for Vimeo</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/01/13/transcontinental-dance-collective/" title="Next Post: transcontinental dance collective">transcontinental dance collective &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/09/masters-thesis/">Master's Thesis</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/03/low-resource-languages/">Low Resource Languages</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/02/26/doxygen-app/">Doxygen 1.8.0, Markdown, and the OS X app</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/25/combined-size-python-script/">combined_size_python_script</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/13/transcontinental-dance-collective/">transcontinental dance collective</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("orluke", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/orluke" class="twitter-follow-button" data-show-count="false">Follow @orluke</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Luke Orland -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'flyorlandic';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://flyorlandic.com/blog/2012/01/13/mediasite-extract-content/';
+        var disqus_url = 'http://flyorlandic.com/blog/2012/01/13/mediasite-extract-content/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

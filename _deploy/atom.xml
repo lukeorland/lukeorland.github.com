@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Luke Orland]]></title>
+  <link href="http://flyorlandic.com/atom.xml" rel="self"/>
+  <link href="http://flyorlandic.com/"/>
+  <updated>2013-06-09T22:38:26-04:00</updated>
+  <id>http://flyorlandic.com/</id>
+  <author>
+    <name><![CDATA[Luke Orland]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Master's Thesis]]></title>
+    <link href="http://flyorlandic.com/blog/2013/06/09/masters-thesis/"/>
+    <updated>2013-06-09T21:56:00-04:00</updated>
+    <id>http://flyorlandic.com/blog/2013/06/09/masters-thesis</id>
+    <content type="html"><![CDATA[<p>My Master’s thesis on domain adaptation for machine translation: [<a href="https://www.dropbox.com/s/ysnlvsbnagruf4j/Luke%20Orland%20-%20MSE%20Project%20Report.pdf">download</a>]</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Low Resource Languages]]></title>
+    <link href="http://flyorlandic.com/blog/2012/07/03/low-resource-languages/"/>
+    <updated>2012-07-03T14:44:00-04:00</updated>
+    <id>http://flyorlandic.com/blog/2012/07/03/low-resource-languages</id>
+    <content type="html"><![CDATA[<p>http://www.kickstarter.com/projects/1858021468/kantza-deep-in-the-amazon-a-story-is-waiting-to-be-0</p>
+
+<p>Hanna Jamal - Children learning to read and write their local languages first is helpful when they are learning a lingua franca</p>
+
+<p>http://www.microsoft.com/en-us/news/features/2012/jul12/07-11Translator.aspx?goback=%2Egde<em>131222_member</em>133895228</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Doxygen 1.8.0, Markdown, and the OS X app]]></title>
+    <link href="http://flyorlandic.com/blog/2012/02/26/doxygen-app/"/>
+    <updated>2012-02-26T10:48:00-05:00</updated>
+    <id>http://flyorlandic.com/blog/2012/02/26/doxygen-app</id>
+    <content type="html"><![CDATA[<p>Doxygen’s brand new support of Markdown has attracted my attention. I tried out the Doxygen.app for OS X. Here are a couple of notes-to-self about this Doxywizard GUI.</p>
+
+<ul>
+  <li>Doxygen 1.8.0 newly supports the Markdown format. However, Doxygen.app does not know to look for <code>*.markdown</code> or <code>*.md</code> source files. Those filename matching patterns must be added to the list in <em>Expert</em> -&gt; <em>Input</em> -&gt; <em>FILE_PATTERNS</em>.</li>
+  <li>It does not automatically load up the <code>Doxyfile</code> located in the specified base project directory. Use the Doxywizard menu to open or save the configuration.</li>
+</ul>
+
+<p>Also, I was getting an error message when configuring the dot output to pdf:</p>
+
+<pre><code>Format: "pdf" not recognized. Use one of: canon cmap cmapx cmapx_np dot eps fig gd gd2 gif gv imap imap_np ismap jpe jpeg jpg plain plain-ext png ps ps2 svg svgz tk vml vmlz vrml wbmp xdot
+Problems running dot: exit code=1, command='/usr/local/bin/dot'`
+</code></pre>
+
+<p>The solution is to reinstall graphviz, building it with Cairo/Pango support.</p>
+
+<p>From this <a href="https://github.com/voormedia/rails-erd/issues/12#issuecomment-1145048">comment</a>:</p>
+
+<blockquote>
+  <ul>
+    <li>Uninstall Cairo, Pango and Graphviz (<code>brew uninstall cairo pango graphviz</code>)</li>
+    <li>Install Cairo, Pango and Graphviz, exactly in this order (<code>brew install cairo pango graphviz</code>)</li>
+  </ul>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[combined_size_python_script]]></title>
+    <link href="http://flyorlandic.com/blog/2012/01/25/combined-size-python-script/"/>
+    <updated>2012-01-25T01:36:00-05:00</updated>
+    <id>http://flyorlandic.com/blog/2012/01/25/combined-size-python-script</id>
+    <content type="html"><![CDATA[<p>Here is a simple Python script that takes a list of files and prints their combined size in bytes (by default) or megabytes (by specifying the –mb switch). Code is below.
+<!-- more --></p>
+
+<div><script src="https://gist.github.com/1673391.js?file=combined_size.py"></script>
+<noscript><pre><code>#!/usr/bin/env python
+
+from __future__ import print_function
+import argparse
+import os
+
+def file_size(file_name):
+    &quot;&quot;&quot;Returns size of the file named file_name in bytes.&quot;&quot;&quot;
+    if not os.path.exists(file_name):
+        msg = &quot;The file {} does not exist.&quot;.format(file_name)
+        raise argparse.ArgumentTypeError(msg)
+    return os.path.getsize(file_name)
+
+def bytes_to_MB(num_bytes):
+    &quot;&quot;&quot;Returns float value&quot;&quot;&quot;
+    return num_bytes / 1e6
+
+def main():
+    # Parse the command line arguments.
+    parser = argparse.ArgumentParser(description='Prints the combined MB of ' +
+                                     'the files passed as arguments.')
+
+    parser.add_argument('file_names', nargs='*',
+                        help='files that are candidates for fitting')
+    parser.add_argument('--bytes', '-b', action='count',
+                        help='prints the total number of bytes instead of MB')
+    args = parser.parse_args()
+    file_names = args.file_names
+    bytes = args.bytes
+
+    total_size = sum([file_size(fn) for fn in file_names])
+    if bytes:
+        print(&quot;{}&quot;.format(total_size))
+    else:
+        print(&quot;{}&quot;.format(bytes_to_MB(total_size)))
+
+if __name__ == '__main__':
+    main()
+
+</code></pre></noscript></div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[transcontinental dance collective]]></title>
+    <link href="http://flyorlandic.com/blog/2012/01/13/transcontinental-dance-collective/"/>
+    <updated>2012-01-13T20:09:00-05:00</updated>
+    <id>http://flyorlandic.com/blog/2012/01/13/transcontinental-dance-collective</id>
+    <content type="html"><![CDATA[<p>Two of my incredibly talented dancer friends embarked on a mission to travel the world learning and teaching dance. Indeed, they traveled many places and creative lovely and inventive dance videos wherever they went. I contributed a basic website to help lend their project a centralized presence on the internet. Mira and Robin have since diverted their attention to a new effort called <em>The Duet Project</em>, and I’m excited to see what sublime creations they will issue forth.</p>
+
+<p>As for the old website, all my fancy CSS work is gone but most of the content still exists thanks to the Wayback Machine internet archive of <a href="http://web.archive.org/web/20080702030005/http://www.transcontinentaldance.org/">transcontinentaldance.org</a>.</p>
+
+<p>Also for posterity, the source of the pages are on <a href="https://github.com/lukeorland/transcontinentaldance.org">GitHub</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[mediasite_extract_content]]></title>
+    <link href="http://flyorlandic.com/blog/2012/01/13/mediasite-extract-content/"/>
+    <updated>2012-01-13T19:54:00-05:00</updated>
+    <id>http://flyorlandic.com/blog/2012/01/13/mediasite-extract-content</id>
+    <content type="html"><![CDATA[<p>Mediasite is a set of webcasting solutions offered by Sonic Foundry. One of the products in the mediasite family is a lecture capturing platform. The end product provided by Mediasite is an embeddable webplayer that plays the video of lecturer in one window and simultaneously flipping through the slides. Slide transition times occur just as during the original lecture.</p>
+
+<p>I wrote a Python script that parses the content of a Mediasite lecture and creates DV-formatted videos of the lecture and the slideshow. In my case these videos are useful for the sake of combining them into a single video which will then be uploaded to Vimeo. The command line tools <code>ffmpeg</code> and <code>mencoder</code> are required.</p>
+
+<p>Below is more information about installing <code>ffmpeg</code> and <code>mencoder</code>, and the script is as follows.</p>
+
+<!-- more -->
+
+<div><script src="https://gist.github.com/1609649.js?file=mediasite_slides_movie.py"></script>
+<noscript><pre><code>#!/usr/bin/env python
+
+# Convert Mediasite content for a lecture into two DV-formatted videos:
+#   one from the lecture
+#   one of the slideshow with timings extracted from the Mediasite content.
+#
+# Usage: run this Python script from the root directory of the Mediasite
+# content.
+# It's the directory that contains the directories and files as follows:
+# App_Themes/    Content/       Player.html   PlayerOptions/     Players/
+# The output files will be written in the same directory.
+#
+# Luke Orland
+# Sat Jan 14 11:44:32 EST 2012
+
+from __future__ import print_function
+import argparse
+import os
+import re
+import shlex
+import subprocess
+import sys
+
+parser = argparse.ArgumentParser(description='pre-process Mediasite content ' +
+                                 'for import to Final Cut Pro')
+
+parser.add_argument('--mencoder', action='store', dest='mencoder_loc',
+                    default='mencoder',
+                    help='Custom location of mencoder')
+
+parser.add_argument('--ffmbc', action='store', dest='ffmbc_loc',
+                    default='ffmbc',
+                    help='Custom location of ffmbc')
+
+parser.add_argument('-i', '--input_dir', action='store', dest='input_dir',
+                    default='.',
+                    help='Root directory of a the content bundle for a ' +
+                    'Mediasite recording. Probably is something like ' +
+                    '/path/to/Untitled-1234/ or similar.',)
+
+parser.add_argument('-o', '--output_dir', action='store', dest='output_dir',
+                    default='.',
+                    help='Output directory for the resulting file(s)')
+
+parser.add_argument('--slides_avi', action='store_true', default=False,
+                    help='Convert the slides jpg files to an AVI video')
+
+parser.add_argument('--slides_fps', action='store', type=float,
+                    default='5',
+                    help='Frames per second in the slides AVI file')
+
+parser.add_argument('--slides_prores', action='store_true', default=False,
+                    help='Convert the slides AVI video to ProRes format')
+
+parser.add_argument('--video_prores', action='store_true', default=False,
+                    help='Convert the lecturer WMV video to ProRes format')
+
+parser.add_argument('-e', '--everything', action='store_true', default=False,
+                    help='Convert everything')
+
+parser.add_argument('--print_times', action='store_true', default=False,
+                    help='print out a list of slide transition times.')
+
+group = parser.add_mutually_exclusive_group()
+group.add_argument('--dim800x600', action='store_true')
+group.add_argument('--dim1280x1024', action='store_true')
+group.add_argument('--dim1024x768', action='store_true')
+
+args = parser.parse_args()
+
+mencoder= args.mencoder_loc
+ffmbc= args.ffmbc_loc
+input_path = os.path.abspath(args.input_dir)
+content_dir = os.path.join(input_path, 'Content')
+output_path = os.path.abspath(args.output_dir)
+
+slides_fps = args.slides_fps
+
+slides_avi_file_path = os.path.join(output_path, 'slides.avi')
+
+content_dir_files = os.listdir(content_dir)
+for file in content_dir_files:
+    file_name, file_extension = os.path.splitext(file)
+    if file_extension == '.wmv':
+        video_wmv_file_path = os.path.join(content_dir, file_name + file_extension)
+
+slides_prores_file_path = os.path.join(output_path, 'slides_prores.mov')
+video_prores_file_path = os.path.join(output_path, 'video_prores.mov')
+
+jpg_frames_file_path = os.path.join(output_path, 'jpg_frames.txt')
+
+if args.everything:
+    to_make_slides_avi = True
+    to_make_slides_prores = True
+    to_make_video_prores = True
+else:
+    to_make_slides_avi = args.slides_avi
+    to_make_slides_prores = args.slides_prores
+    to_make_video_prores = args.video_prores
+
+# ProRes output settings
+prores_fps = '-r 25'
+video_prores_frame_dims = '-s 960x720'
+
+
+# use the crop args for debugging, to make 5 second ProRes files.
+#prores_crop_args = '-ss 0 -t 5'
+prores_crop_args = ''
+
+prores_threads = '-threads 16'
+prores_profile = '-profile hq'
+slides_prores_frame_dims = '-s 900x720'
+if args.dim800x600 or args.dim1024x768:
+    print(&quot;4 x 3 aspect ratio&quot;)
+    if args.dim800x600:
+        mf_dimensions_and_fps = '-mf w=800:h=600:fps=' + str(slides_fps) + ':type=jpg'
+    if args.dim1024x768:
+        mf_dimensions_and_fps = '-mf w=1024:h=768:fps=' + str(slides_fps) + ':type=jpg'
+    slides_prores_slides_letterbox = ''
+    # 960x720 output size
+    slides_prores_frame_dims = video_prores_frame_dims
+else: # args.dim1280x1024
+    print(&quot;5 x 4 aspect ratio&quot;)
+    mf_dimensions_and_fps = '-mf w=1280:h=1024:fps=' + str(slides_fps) + ':type=jpg'
+    slides_prores_slides_letterbox = '-vf pad=960:720:30:0:black'
+
+
+def get_duration_ms():
+    &quot;&quot;&quot;Read the duration time from the Players/Scripts/standalone-manifest.js
+    file.
+    &quot;&quot;&quot;
+    transition_times_file_path = os.path.join(input_path, 'Players', 'Scripts',
+                                            'standalone-manifest.js')
+    re_duration_ms = re.compile('\s*Manifest\.Duration=(\d+);')
+    with open(transition_times_file_path) as fh:
+        for line in fh.readlines():
+            match = re_duration_ms.match(line)
+            if match is not None:
+                duration_ms = int(match.group(1))
+    return duration_ms
+
+
+def get_transition_times_ms():
+    &quot;&quot;&quot;Read the transition times from the Players/Scripts/standalone-manifest.js
+    file.
+    &quot;&quot;&quot;
+    transition_times_file_path = os.path.join(input_path, 'Players', 'Scripts',
+                                            'standalone-manifest.js')
+    re_slide_xstn_ms = re.compile('\s*Manifest\.Slides\[\d+\] = new Slide\(&quot;&quot;,(\d+),&quot;&quot;\);')
+    transition_times_ms = []
+    with open(transition_times_file_path) as fh:
+        for line in fh.readlines():
+            match = re_slide_xstn_ms.match(line)
+            if match is not None:
+                transition_times_ms.append(int(match.group(1)))
+    return transition_times_ms
+
+
+def write_jpgs_list():
+    # Count the number of JPG files in the Content directory.
+    list_jpgs = sorted([file for file in os.listdir(content_dir) if
+                        file.lower().endswith('.jpg')])
+    list_jpgs.insert(0, list_jpgs[0])
+    list_jpgs.append(list_jpgs[-1])
+
+    trans_times_ms = get_transition_times_ms()
+    duration_ms = get_duration_ms()
+    trans_times_ms.append(duration_ms)
+
+    # Index into list_jpgs
+    jpg_idx = 0
+
+    # Number of milliseconds elapsed
+    ms = 0
+
+    # The length of time to show each frame
+    frame_duration = 1000.0 / slides_fps
+
+    output_lines = []
+    for trans_time in trans_times_ms:
+
+        while ms &lt;= trans_time:
+
+            output_lines.append(list_jpgs[jpg_idx])
+            ms += frame_duration
+
+        # Advance the frame.
+        #print(&quot;{}\t{}&quot;.format(time_formatter(int(ms)), list_jpgs[jpg_idx]))
+        jpg_idx += 1
+
+    with open(jpg_frames_file_path, 'w') as fh:
+        lines_str = &quot;\n&quot;.join(output_lines)
+        fh.write(lines_str)
+
+
+def do_slides_avi():
+    write_jpgs_list()
+    # Use that text file with the MEncoder script to turn the JPGs into an AVI.
+    print(slides_avi_file_path)
+    cmd = ' '.join([mencoder,
+                    'mf://@' + jpg_frames_file_path,
+                    mf_dimensions_and_fps,
+                    #'-mf w=1280:h=1024:fps=1:type=jpg',
+                    #'-ovc lavc',
+                    #'-lavcopts vcodec=mpeg4:mbd=2:trell',
+                    '-ovc copy',
+                    '-oac copy',
+                    '-o', slides_avi_file_path])
+    print(cmd)
+    args = shlex.split(cmd)
+    p = subprocess.Popen(args, cwd=content_dir)
+    p.wait()
+    print()
+
+
+def do_slides_prores():
+    '''Use ffmbc to convert the slides AVI into ProRes.'''
+    cmd = ' '.join([ffmbc,
+                    prores_threads,
+                    '-y',
+                    prores_crop_args,
+                    '-i',
+                    slides_avi_file_path,
+                    '-vcodec prores',
+                    prores_profile,
+                    prores_fps,
+                    slides_prores_frame_dims,
+                    slides_prores_slides_letterbox,
+                    '-acodec copy',
+                    slides_prores_file_path])
+    print(cmd)
+    args = shlex.split(cmd)
+    p = subprocess.Popen(args, cwd=output_path)
+    print()
+
+
+def do_video_prores():
+    '''Use ffmbc to convert the WMV lecture video into DV.'''
+    cmd = ' '.join([ffmbc,
+                    prores_threads,
+                    '-y',
+                    prores_crop_args,
+                    '-i',
+                    video_wmv_file_path,
+                    '-vcodec prores',
+                    prores_profile,
+                    prores_fps,
+                    video_prores_frame_dims,
+                    '-acodec pcm_s16le',
+                    video_prores_file_path])
+    print(cmd)
+    args = shlex.split(cmd)
+    p = subprocess.Popen(args, cwd=output_path)
+
+
+def time_formatter(time):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; time_formatter(61000)
+    1:01.0
+    &quot;&quot;&quot;
+    mins = time / 60000
+    secs = time % 60000 / 1000
+    msecs = time % 60000 % 1000
+    return &quot;{0}:{1:02d}.{2:01d}&quot;.format(mins, secs, msecs)
+
+
+def do_print_video_length():
+    print(&quot;\nDuration: {} minutes&quot;.format(time_formatter(get_duration_ms())))
+
+
+def do_print_trans_times(trans_times):
+    # Loop through, printing out slide number \t timestamp
+    slide_idx = 0
+    for time in trans_times:
+        slide_idx += 1
+        print(&quot;{0:04d}\t{1}&quot;.format(slide_idx, time_formatter(time)))
+
+
+if __name__ == '__main__':
+    # Start lecture video conversion first, since it takes the longest to finish.
+    if to_make_video_prores:
+        do_video_prores()
+
+    if to_make_slides_avi:
+        do_slides_avi()
+
+    if to_make_slides_prores:
+        if not os.path.exists(slides_avi_file_path):
+            print(&quot;Cannot create slides ProRes: slides.avi does not exist.&quot;)
+            sys.exit(1)
+        do_slides_prores()
+
+    if args.print_times:
+        do_print_trans_times(get_transition_times_ms())
+        do_print_video_length()
+</code></pre></noscript></div>
+
+<h1 id="installing-ffmpeg-and-mencoder">Installing <code>ffmpeg</code> and <code>mencoder</code></h1>
+<p>## Mac OS X
+### <code>mencoder</code> with Homebrew
+A user who has <code>homebrew</code> installed presumably has read/write access to the right system directories, and the commands are simply</p>
+
+<pre><code>brew install mplayer
+</code></pre>
+
+<h3 id="mencoder-with-downloaded-binaries"><code>mencoder</code> with downloaded binaries</h3>
+<p>Not having read/write access to the right system directories on a certain system, I found a different approach, which is to download the binaries and update the script to use the correct location.</p>
+
+<p>The MEncoder binary can be downloaded from the bottom of this <a href="http://stefpause.com/apple/mac/mplayer-os-x-10rc1-and-mencoder-binaries/">post</a>.</p>
+
+<h3 id="ffmpeg-with-homebrew">ffmpeg with Homebrew</h3>
+<p>A user who has <code>homebrew</code> installed presumably has read/write access to the right system directories, and the commands are simply</p>
+
+<pre><code>brew install ffmpeg
+</code></pre>
+
+<h3 id="ffmpeg-from-source"><code>ffmpeg</code> from source</h3>
+<p>This <a href="http://jungels.net/articles/ffmpeg-howto.html">post</a> provides instructions on building ffmpeg from source. It’s likely that one needs the extra libraries installed with XCode to build this from source.</p>
+
+<h3 id="ffmpeg-binary"><code>ffmpeg</code> binary</h3>
+
+<p>The ffmpegX project (which seems to be defunct) provides a command-line binary in the OS X package. Download it, install it, and then edit the script to use the <code>ffmpegX</code> binary located at <code>Applications/ffmpegX.app/Contents/MacOS/ffmpegX</code>.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[a knapsack for Vimeo]]></title>
+    <link href="http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo/"/>
+    <updated>2012-01-10T09:43:00-05:00</updated>
+    <id>http://flyorlandic.com/blog/2012/01/10/a-knapsack-for-vimeo</id>
+    <content type="html"><![CDATA[<p>The Vimeo Premium account allows a user to upload up to 5 GiB of videos per week. The size of a video cannot be distributed across subsequent weeks. Unused upload space does not roll over to following weeks. My goal is to make the most cost-effective use of the Vimeo Premium account by uploading as close to the full 5 GiB as possible every week.</p>
+
+<p>As it turns out, selecting a subset of available video files that combine for the maximum fit within a certain limit is an instance of the <a href="http://en.wikipedia.org/wiki/Knapsack_problem#0-1_knapsack_problem">0-1 knapsack problem</a>. I wrote a 0-1 knapsack solver module (in Python) as well as a command-line Python script that utilizes the solver to determine the optimal list of video files to upload for the week.</p>
+
+<h2 id="search-space">Search space</h2>
+<p>To understand how this is a difficult problem to solve, consider the number of possible combinations of <script type="math/tex">N</script> files that could comprise a unique subset. Each file is either in each subset or not. That means there are <script type="math/tex">2^N</script> possible combinations of candidate files. For a set of 40 files, there would be <script type="math/tex">2^{40} = 1,099,511,627,776</script> possibilities from which an exact optimal subset would be identified.</p>
+
+<h1 id="solver">Solver</h1>
+<p>My first solution uses a pure branch-and-bound recursive algorithm. The weight and profit of each file is its size in bytes, and the capacity of the knapsack is <script type="math/tex">5\times 2^{30} = 5,368,709,120</script> bytes. This approach is much too inefficient, likely due to repeated evaluations of the same subsets in rearranged order.</p>
+
+<h2 id="next-step">Next step</h2>
+<p>Alternatively, a well-known dynamic programming algorithm can be employed. I implemented this method, which indeed finds the exact solution much more quickly, in <script type="math/tex">O(NW)</script> time and <script type="math/tex">O(W)</script> space, where <script type="math/tex">N</script> is the number of candidate files, and <script type="math/tex">W</script> is the size limit.</p>
+
+<p>The code I have written can be found at <a href="https://github.com/lukeorland/maxfit">github.com/lukeorland/maxfit</a>.</p>
+
+<p><em>edited Fri Jan 27 15:05:40 EST 2012</em></p>
+]]></content>
+  </entry>
+  
+</feed>
